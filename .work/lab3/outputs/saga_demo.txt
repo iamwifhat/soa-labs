@@ -1,0 +1,81 @@
+  $ consul kv put config/participation-service/fault-mode none
+
+=== 1. SAGA CreateEvent: успішне виконання ===
+  POST /events -> HTTP 202, подія Pending v1
+  [OK] подію прийнято (202) у стані Pending
+  SAGA CreateEvent: Completed
+    +  0.0 с  Крок 1 (calendar): подію збережено зі статусом Pending; EventCreated.v1 записано в outbox у тій самій транзакції
+    +  0.3 с  Крок 2 (participation): отримано InvitationsCreated.v1 від participation-service
+    +  0.3 с  SAGA завершено: подія v2 Scheduled; EventConfirmed.v1 записано в outbox
+  подія: Scheduled v2
+  [OK] SAGA завершено, подія Scheduled v2
+  outbox #1: EventCreated.v1    опубліковано 2026-10-31T10:34:42.484563+00:00
+  outbox #2: EventConfirmed.v1  опубліковано 2026-10-31T10:34:43.094451+00:00
+  [OK] обидва повідомлення пройшли через outbox
+  лист для bob-c75099: Запрошення на «Планування спринту» 01.11.2026 12:00 [Sent]
+  [OK] лист надіслано лише після EventConfirmed
+
+=== 2. Transactional Inbox: повторна доставка того самого повідомлення ===
+  повторно опубліковано EventCreated.v1 75eeee92-1547-4fd0-957b-418393209c42 -> routed=True
+  participation: Дублікат EventCreated.v1 75eeee92-1547-4fd0-957b-418393209c42 пропущено (inbox)
+  [OK] дублікат відсіяно inbox, запрошень не додалося
+
+=== 3. SAGA RescheduleEvent: успішне перенесення ===
+  bob-c75099 відповів Accepted на версію 2
+  PATCH -> HTTP 202, нова версія 3
+    +  0.0 с  Крок 1 (calendar): новий час збережено як версію 3, попередній час — у даних компенсації; EventRescheduled.v1 записано в outbox
+    +  0.5 с  Крок 2 (participation): отримано InvitationsRescheduled.v1 від participation-service
+    +  0.5 с  SAGA завершено: подія v3 Scheduled; EventRescheduleConfirmed.v1 записано в outbox
+  запрошення bob-c75099: Pending для v3 (Scheduled)
+  [OK] перенесення завершено, відповідь скинуто до Pending
+
+=== 4. SAGA RescheduleEvent: збій учасника -> DLQ -> компенсація ===
+  bob-c75099 знову прийняв запрошення для v3 (2026-11-01T13:00:00+00:00) -> HTTP 200 Accepted
+  $ consul kv put config/participation-service/fault-mode error
+  PATCH -> HTTP 202, версія 4, новий час 2026-11-01T16:00:00+00:00
+  $ consul kv put config/participation-service/fault-mode none
+    +  0.0 с  Крок 1 (calendar): новий час збережено як версію 4, попередній час — у даних компенсації; EventRescheduled.v1 записано в outbox
+    +  4.4 с  Збій: повідомлення EventRescheduled.v1 потрапило в DLQ черги participation.calendar-events (причина: delivery_limit)
+    +  4.4 с  Компенсація: подія v5 Scheduled, EventRescheduleReverted.v1 записано в outbox для учасників
+  participation: Помилка обробки EventRescheduled.v1 2c809d83-abcd-45e4-8770-795170cd50e7, спроба 1 з 4: імітований збій запису під час EventRescheduled.v1 (fault-mode
+  participation: Помилка обробки EventRescheduled.v1 2c809d83-abcd-45e4-8770-795170cd50e7, спроба 2 з 4: імітований збій запису під час EventRescheduled.v1 (fault-mode
+  participation: Помилка обробки EventRescheduled.v1 2c809d83-abcd-45e4-8770-795170cd50e7, спроба 3 з 4: імітований збій запису під час EventRescheduled.v1 (fault-mode
+  participation: Помилка обробки EventRescheduled.v1 2c809d83-abcd-45e4-8770-795170cd50e7, спроба 4 з 4: імітований збій запису під час EventRescheduled.v1 (fault-mode
+  подія: v5 2026-11-01T13:00:00+00:00; запрошення bob-c75099: Accepted v5
+  [OK] час події відновлено, відповідь Accepted збережено
+
+=== 5. SAGA CreateEvent: збій учасника -> DLQ -> компенсація ===
+  $ consul kv put config/participation-service/fault-mode error
+  $ consul kv put config/participation-service/fault-mode none
+    +  0.0 с  Крок 1 (calendar): подію збережено зі статусом Pending; EventCreated.v1 записано в outbox у тій самій транзакції
+    +  4.3 с  Збій: повідомлення EventCreated.v1 потрапило в DLQ черги participation.calendar-events (причина: delivery_limit)
+    +  4.3 с  Компенсація: подія v2 Cancelled, EventCancelled.v1 записано в outbox для учасників
+  подія: Cancelled v2; запрошень у participation: 0
+  [OK] подію скасовано компенсацією, запрошень немає
+
+=== 6. Transactional Outbox: RabbitMQ недоступний під час створення події ===
+  $ docker compose stop rabbitmq
+  POST /events -> HTTP 202; outbox: неопубліковано 1
+  [OK] сервіс приймає зміну без брокера, повідомлення чекає в outbox
+  $ docker compose start rabbitmq
+  SAGA Completed через 7.1 с після запуску брокера
+    +  0.0 с  Крок 1 (calendar): подію збережено зі статусом Pending; EventCreated.v1 записано в outbox у тій самій транзакції
+    +  7.2 с  Крок 2 (participation): отримано InvitationsCreated.v1 від participation-service
+    +  7.2 с  SAGA завершено: подія v2 Scheduled; EventConfirmed.v1 записано в outbox
+  outbox: неопубліковано 0, опубліковано 10
+  [OK] після відновлення брокера SAGA завершилася
+
+=== 7. SAGA CreateEvent: учасник не відповів до дедлайну -> компенсація за таймаутом ===
+  $ consul kv put config/participation-service/fault-mode delay
+  скасування під час SAGA -> HTTP 409: Подія бере участь у незавершеній SAGA 44c25d9f-2c11-4b22-9c0e-acc584b50d7f; повторіть пізніше
+  [OK] семантичне блокування відхиляє зміну під час SAGA (409)
+  $ consul kv put config/participation-service/fault-mode none
+  SAGA Compensated: таймаут 30 с: відповідь учасника не надійшла
+    +  0.0 с  Крок 1 (calendar): подію збережено зі статусом Pending; EventCreated.v1 записано в outbox у тій самій транзакції
+    + 30.7 с  Збій: таймаут 30 с: відповідь учасника не надійшла
+    + 30.7 с  Компенсація: подія v2 Cancelled, EventCancelled.v1 записано в outbox для учасників
+    + 45.3 с  Запізнілу відповідь InvitationsCreated.v1 проігноровано: SAGA вже у стані Compensated
+  запрошення, створені із запізненням: ['Revoked']
+  [OK] запізнілу відповідь проігноровано, запрошення відкликано
+
+Перевірок: 12, успішних: 12

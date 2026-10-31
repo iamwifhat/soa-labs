@@ -1,0 +1,27 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab3-saga-3</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab3 — zsh</div><pre><span class="cmd">$ python3 scripts/saga_demo.py   (продовження)</span>
+=== 5. SAGA CreateEvent: збій учасника -&gt; DLQ -&gt; компенсація ===
+  $ consul kv put config/participation-service/fault-mode error
+  $ consul kv put config/participation-service/fault-mode none
+    +  0.0 с  Крок 1 (calendar): подію збережено зі статусом Pending; EventCreated.v1 записано в outbox у тій самій транзакції
+    +  4.3 с  Збій: повідомлення EventCreated.v1 потрапило в DLQ черги participation.calendar-events (причина: delivery_limit)
+    +  4.3 с  Компенсація: подія v2 Cancelled, EventCancelled.v1 записано в outbox для учасників
+  подія: Cancelled v2; запрошень у participation: 0
+  [OK] подію скасовано компенсацією, запрошень немає
+
+=== 6. Transactional Outbox: RabbitMQ недоступний під час створення події ===
+  $ docker compose stop rabbitmq
+  POST /events -&gt; HTTP 202; outbox: неопубліковано 1
+  [OK] сервіс приймає зміну без брокера, повідомлення чекає в outbox
+  $ docker compose start rabbitmq
+  SAGA Completed через 7.1 с після запуску брокера
+    +  0.0 с  Крок 1 (calendar): подію збережено зі статусом Pending; EventCreated.v1 записано в outbox у тій самій транзакції
+    +  7.2 с  Крок 2 (participation): отримано InvitationsCreated.v1 від participation-service
+    +  7.2 с  SAGA завершено: подія v2 Scheduled; EventConfirmed.v1 записано в outbox
+  outbox: неопубліковано 0, опубліковано 10
+  [OK] після відновлення брокера SAGA завершилася</pre></div></html>

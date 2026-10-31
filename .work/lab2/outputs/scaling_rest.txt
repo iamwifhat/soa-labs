@@ -1,0 +1,46 @@
+
+=== Серверне балансування: Traefik розподіляє 12 запитів між екземплярами calendar-service ===
+  calendar-service@2bb822794dc4        5 запитів
+  calendar-service@4640b9b7a24b        4 запитів
+  calendar-service@66e276518598        3 запитів
+
+=== Клієнтське балансування: 18 ланцюжків, calendar-service обирає participation-service з Consul ===
+  calendar[2bb822794dc4] -> participation[000864d922e4]: 2
+  calendar[2bb822794dc4] -> participation[a751c005f85e]: 2
+  calendar[2bb822794dc4] -> participation[fbca4e9a6e94]: 2
+  calendar[4640b9b7a24b] -> participation[000864d922e4]: 2
+  calendar[4640b9b7a24b] -> participation[a751c005f85e]: 2
+  calendar[4640b9b7a24b] -> participation[fbca4e9a6e94]: 2
+  calendar[66e276518598] -> participation[000864d922e4]: 2
+  calendar[66e276518598] -> participation[a751c005f85e]: 2
+  calendar[66e276518598] -> participation[fbca4e9a6e94]: 2
+  Разом на екземпляри participation-service: 000864d922e4=6, a751c005f85e=6, fbca4e9a6e94=6
+
+=== Відмова екземпляра: аварійна зупинка одного participation-service ===
+$ docker kill fbca4e9a6e94
+  запит 1: HTTP 200, participation[a751c005f85e], 7 мс, у Consul справних: 3
+  запит 2: HTTP 200, participation[a751c005f85e], 8 мс, у Consul справних: 3
+  запит 3: HTTP 200, participation[000864d922e4], 3016 мс, у Consul справних: 2
+  запит 4: HTTP 200, participation[000864d922e4], 20 мс, у Consul справних: 2
+  запит 5: HTTP 200, participation[a751c005f85e], 26 мс, у Consul справних: 2
+  запит 6: HTTP 200, participation[000864d922e4], 25 мс, у Consul справних: 2
+  запит 7: HTTP 200, participation[000864d922e4], 20 мс, у Consul справних: 2
+  запит 8: HTTP 200, participation[a751c005f85e], 8 мс, у Consul справних: 2
+$ docker start fbca4e9a6e94
+  Екземпляр повернувся до каталогу: справних 3
+
+=== Зменшення кількості екземплярів до одного (зняття з реєстрації під час зупинки) ===
+$ docker compose up -d --scale calendar-service=1 --scale participation-service=1
+  calendar-service: справних екземплярів 1
+  participation-service: справних екземплярів 1
+
+=== Circuit Breaker: недоступний notification-service ===
+$ docker compose stop notification-service
+  запит 1:    28 мс, breaker=CLOSED    notification-service: немає справних екземплярів
+  запит 2:     7 мс, breaker=CLOSED    notification-service: немає справних екземплярів
+  запит 3:     6 мс, breaker=OPEN      notification-service: немає справних екземплярів
+  запит 4:     6 мс, breaker=OPEN      notification-service: circuit breaker OPEN
+  запит 5:     5 мс, breaker=OPEN      notification-service: circuit breaker OPEN
+$ docker compose start notification-service
+  через 10 с:    26 мс, breaker=CLOSED    дані отримано
+  наступний:     9 мс, breaker=CLOSED    дані отримано

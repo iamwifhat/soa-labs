@@ -1,0 +1,26 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab2-demo-2</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab2 — zsh</div><pre><span class="cmd">$ python3 scripts/demo.py   (продовження)</span>
+=== 3. Хореографія: створення події з двома запрошеними ===
+  POST /events -&gt; HTTP 201, ETag &quot;1&quot;, eventId 25532b36-56b8-4402-a234-87400e7cf259
+  [OK] подію створено (201) з версією 1
+  participation: запрошення bob-62d8b1 -&gt; Pending (версія події 1)
+  [OK] сервіс участі створив запрошення з повідомлення EventCreated
+  notification: Invitation -&gt; bob-62d8b1: Запрошення на «Рев&#x27;ю архітектури» 31.10.2026 12:47 [Sent]
+  [OK] сервіс сповіщень надіслав лист з повідомлення InvitationCreated
+  notification: Reminder -&gt; alice-62d8b1: Нагадування: «Рев&#x27;ю архітектури» о 31.10.2026 12:47
+
+=== 4. Відповіді на запрошення (ідемпотентність команди) ===
+  bob: Accepted; повтор з тим самим ключем -&gt; replayed=True
+  [OK] повтор команди повертає збережений результат
+
+=== 5. Композиція даних трьох сервісів (синхронно) ===
+  запрошення bob-62d8b1     Accepted  v1
+  запрошення carol-62d8b1   Declined  v1
+  нагадування alice-62d8b1  Sent      2026-10-31T10:17:00+00:00
+  нагадування bob-62d8b1    Scheduled 2026-10-31T10:17:00+00:00
+  [OK] overview зібрано з participation і notification</pre></div></html>

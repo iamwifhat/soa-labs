@@ -1,0 +1,21 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab2-demo-1</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab2 — zsh</div><pre><span class="cmd">$ python3 scripts/demo.py</span>
+=== 1. Стан сервісів через шлюз ===
+  calendar      HTTP 200 UP  X-Served-By: calendar-service@3eec111afb7e
+  [OK] calendar-service доступний через шлюз
+  participation HTTP 200 UP  X-Served-By: participation-service@c4e18832321b
+  [OK] participation-service доступний через шлюз
+  notification  HTTP 200 UP  X-Served-By: notification-service@7e23f974fb03
+  [OK] notification-service доступний через шлюз
+
+=== 2. Синхронний ланцюжок calendar -&gt; participation -&gt; notification ===
+  message: hello -&gt; calendar[3eec111afb7e] -&gt; participation[c4e18832321b] -&gt; notification[7e23f974fb03]
+  - calendar-service       HTTP/1.1 REST  від: api-gateway@1e3d2459bdaa
+  - participation-service  HTTP/1.1 REST  від: calendar-service (адресу знайдено в Consul, клієнтський round robin)
+  - notification-service   HTTP/1.1 REST  від: participation-service (адресу знайдено в Consul, клієнтський round robin)
+  [OK] кожен сервіс дописав свій фрагмент</pre></div></html>

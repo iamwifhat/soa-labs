@@ -1,0 +1,58 @@
+
+=== 1. Стан сервісів через шлюз ===
+  calendar      HTTP 200 UP  X-Served-By: calendar-service@3eec111afb7e
+  [OK] calendar-service доступний через шлюз
+  participation HTTP 200 UP  X-Served-By: participation-service@c4e18832321b
+  [OK] participation-service доступний через шлюз
+  notification  HTTP 200 UP  X-Served-By: notification-service@7e23f974fb03
+  [OK] notification-service доступний через шлюз
+
+=== 2. Синхронний ланцюжок calendar -> participation -> notification ===
+  message: hello -> calendar[3eec111afb7e] -> participation[c4e18832321b] -> notification[7e23f974fb03]
+  - calendar-service       HTTP/1.1 REST  від: api-gateway@1e3d2459bdaa
+  - participation-service  HTTP/1.1 REST  від: calendar-service (адресу знайдено в Consul, клієнтський round robin)
+  - notification-service   HTTP/1.1 REST  від: participation-service (адресу знайдено в Consul, клієнтський round robin)
+  [OK] кожен сервіс дописав свій фрагмент
+
+=== 3. Хореографія: створення події з двома запрошеними ===
+  POST /events -> HTTP 201, ETag "1", eventId 25532b36-56b8-4402-a234-87400e7cf259
+  [OK] подію створено (201) з версією 1
+  participation: запрошення bob-62d8b1 -> Pending (версія події 1)
+  [OK] сервіс участі створив запрошення з повідомлення EventCreated
+  notification: Invitation -> bob-62d8b1: Запрошення на «Рев'ю архітектури» 31.10.2026 12:47 [Sent]
+  [OK] сервіс сповіщень надіслав лист з повідомлення InvitationCreated
+  notification: Reminder -> alice-62d8b1: Нагадування: «Рев'ю архітектури» о 31.10.2026 12:47
+
+=== 4. Відповіді на запрошення (ідемпотентність команди) ===
+  bob: Accepted; повтор з тим самим ключем -> replayed=True
+  [OK] повтор команди повертає збережений результат
+
+=== 5. Композиція даних трьох сервісів (синхронно) ===
+  запрошення bob-62d8b1     Accepted  v1
+  запрошення carol-62d8b1   Declined  v1
+  нагадування alice-62d8b1  Sent      2026-10-31T10:17:00+00:00
+  нагадування bob-62d8b1    Scheduled 2026-10-31T10:17:00+00:00
+  [OK] overview зібрано з participation і notification
+
+=== 6. Оркестрація: перенесення події координатором ===
+  PATCH -> HTTP 200, нова версія 2, координатор calendar-service@3eec111afb7e
+  крок reset-invitations  DONE  participation-service@c4e18832321b  {"eventId": "25532b36-56b8-4402-a234-87400e7cf259", "eventVersion": 2, "updated": 2, "resetResponses": 2}
+  крок move-reminders     DONE  notification-service@7e23f974fb03  {"eventId": "25532b36-56b8-4402-a234-87400e7cf259", "eventVersion": 2, "moved": 1, "awaitingReconfirmation": 1}
+  [OK] усі кроки оркестрації виконано
+  [OK] відповідь bob скинуто до Pending для нової версії
+
+=== 7. Захист від застарілих змін ===
+  PATCH з If-Match "1" -> HTTP 412: Очікувана версія 1 не збігається з поточною 2
+  [OK] застаріла версія відхилена (412)
+  відповідь bob на версію 1 -> HTTP 409: Відповідь стосується версії події 1, актуальна версія 2
+  [OK] відповідь на застарілу версію відхилена (409)
+  подія із завершенням до початку -> HTTP 422: Початок події має передувати завершенню
+  [OK] порушення інваріанту часу відхилено (422)
+
+=== 8. Хореографія: скасування події ===
+  POST /cancel -> HTTP 200, статус Cancelled, версія 3
+  participation: відкликано 2 запрошення
+  notification: EventCancelled -> carol-62d8b1: Подію «Рев'ю архітектури» скасовано
+  [OK] запрошення відкликано, адресатів сповіщено
+
+Перевірок: 15, успішних: 15

@@ -1,0 +1,6 @@
+2026-10-31 10:17:12,654 INFO notification-service@7e23f974fb03 [notification] EMAIL [Invitation] -> bob-62d8b1: Запрошення на «Рев'ю архітектури» 31.10.2026 12:47 (Sent)
+2026-10-31 10:17:12,654 INFO notification-service@7e23f974fb03 [notification] EMAIL [Invitation] -> carol-62d8b1: Запрошення на «Рев'ю архітектури» 31.10.2026 12:47 (Sent)
+2026-10-31 10:17:12,654 INFO notification-service@7e23f974fb03 [notification] EMAIL [Reminder] -> alice-62d8b1: Нагадування: «Рев'ю архітектури» о 31.10.2026 12:47 (Sent)
+2026-10-31 10:17:14,656 INFO notification-service@7e23f974fb03 [notification] EMAIL [Response] -> alice-62d8b1: bob-62d8b1: Accepted для «Рев'ю архітектури» (Sent)
+2026-10-31 10:17:14,656 INFO notification-service@7e23f974fb03 [notification] EMAIL [Response] -> alice-62d8b1: carol-62d8b1: Declined для «Рев'ю архітектури» (Sent)
+2026-10-31 10:17:14,656 INFO notification-service@7e23f974fb03 [notification] EMAIL [EventRescheduled] -> bob-62d8b1: Подію «Рев'ю архітектури» перенесено на 01.11.2026 12:47; підтвердьте участь повторно (Sent)

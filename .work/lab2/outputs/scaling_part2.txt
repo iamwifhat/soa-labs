@@ -1,0 +1,29 @@
+
+=== Відмова екземпляра: аварійна зупинка одного participation-service ===
+$ docker kill 6eb84781ddf6
+  запит 1: HTTP 200, participation[96af07ccbab6], 3051 мс, у Consul справних: 3
+  запит 2: HTTP 200, participation[96af07ccbab6], 19 мс, у Consul справних: 2
+  запит 3: HTTP 200, participation[c4e18832321b], 30 мс, у Consul справних: 2
+  запит 4: HTTP 200, participation[c4e18832321b], 22 мс, у Consul справних: 2
+  запит 5: HTTP 200, participation[96af07ccbab6], 27 мс, у Consul справних: 2
+  запит 6: HTTP 200, participation[96af07ccbab6], 20 мс, у Consul справних: 2
+  запит 7: HTTP 200, participation[c4e18832321b], 9 мс, у Consul справних: 2
+  запит 8: HTTP 200, participation[96af07ccbab6], 14 мс, у Consul справних: 2
+$ docker start 6eb84781ddf6
+  Екземпляр повернувся до каталогу: справних 3
+
+=== Зменшення кількості екземплярів до одного (зняття з реєстрації під час зупинки) ===
+$ docker compose up -d --scale calendar-service=1 --scale participation-service=1
+  calendar-service: справних екземплярів 1
+  participation-service: справних екземплярів 1
+
+=== Circuit Breaker: недоступний notification-service ===
+$ docker compose stop notification-service
+  запит 1:    13 мс, breaker=CLOSED    notification-service: немає справних екземплярів
+  запит 2:     6 мс, breaker=CLOSED    notification-service: немає справних екземплярів
+  запит 3:     6 мс, breaker=OPEN      notification-service: немає справних екземплярів
+  запит 4:     4 мс, breaker=OPEN      notification-service: circuit breaker OPEN
+  запит 5:     4 мс, breaker=OPEN      notification-service: circuit breaker OPEN
+$ docker compose start notification-service
+  через 10 с:    12 мс, breaker=CLOSED    дані отримано
+  наступний:     5 мс, breaker=CLOSED    дані отримано

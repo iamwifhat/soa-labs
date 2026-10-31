@@ -1,0 +1,36 @@
+
+=== Масштабування: calendar-service і participation-service до 3 екземплярів ===
+$ docker compose up -d --scale calendar-service=3 --scale participation-service=3
+Consul: calendar-service
+  calendar-service-3a86e90ca126        172.21.0.13:8000  health: passing, passing
+  calendar-service-3eec111afb7e        172.21.0.8:8000  health: passing, passing
+  calendar-service-bc153a0142f9        172.21.0.11:8000  health: passing, passing
+Consul: participation-service
+  participation-service-6eb84781ddf6   172.21.0.14:8000  health: passing, passing
+  participation-service-96af07ccbab6   172.21.0.12:8000  health: passing, passing
+  participation-service-c4e18832321b   172.21.0.9:8000  health: passing, passing
+Consul: notification-service
+  notification-service-7e23f974fb03    172.21.0.10:8000  health: passing, passing
+
+=== Серверне балансування: Traefik розподіляє 30 запитів між екземплярами calendar-service ===
+  calendar-service@3a86e90ca126        10 запитів
+  calendar-service@3eec111afb7e        10 запитів
+  calendar-service@bc153a0142f9        10 запитів
+
+=== Клієнтське балансування: 18 ланцюжків, calendar-service обирає participation-service з Consul ===
+  calendar[3a86e90ca126] -> participation[6eb84781ddf6]: 2
+  calendar[3a86e90ca126] -> participation[96af07ccbab6]: 2
+  calendar[3a86e90ca126] -> participation[c4e18832321b]: 2
+  calendar[3eec111afb7e] -> participation[6eb84781ddf6]: 2
+  calendar[3eec111afb7e] -> participation[96af07ccbab6]: 2
+  calendar[3eec111afb7e] -> participation[c4e18832321b]: 2
+  calendar[bc153a0142f9] -> participation[6eb84781ddf6]: 2
+  calendar[bc153a0142f9] -> participation[96af07ccbab6]: 2
+  calendar[bc153a0142f9] -> participation[c4e18832321b]: 2
+  Разом на екземпляри participation-service: 6eb84781ddf6=6, 96af07ccbab6=6, c4e18832321b=6
+
+=== Конкуруючі споживачі: 9 повідомлень EventCreated з однієї черги ===
+  participation-service@6eb84781ddf6   обробив 3
+  participation-service@96af07ccbab6   обробив 3
+  participation-service@c4e18832321b   обробив 3
+  Усього оброблено: 9 з 9

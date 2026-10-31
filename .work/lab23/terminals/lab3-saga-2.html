@@ -1,0 +1,30 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab3-saga-2</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab3 — zsh</div><pre><span class="cmd">$ python3 scripts/saga_demo.py   (продовження)</span>
+=== 3. SAGA RescheduleEvent: успішне перенесення ===
+  bob-c75099 відповів Accepted на версію 2
+  PATCH -&gt; HTTP 202, нова версія 3
+    +  0.0 с  Крок 1 (calendar): новий час збережено як версію 3, попередній час — у даних компенсації; EventRescheduled.v1 записано в outbox
+    +  0.5 с  Крок 2 (participation): отримано InvitationsRescheduled.v1 від participation-service
+    +  0.5 с  SAGA завершено: подія v3 Scheduled; EventRescheduleConfirmed.v1 записано в outbox
+  запрошення bob-c75099: Pending для v3 (Scheduled)
+  [OK] перенесення завершено, відповідь скинуто до Pending
+
+=== 4. SAGA RescheduleEvent: збій учасника -&gt; DLQ -&gt; компенсація ===
+  bob-c75099 знову прийняв запрошення для v3 (2026-11-01T13:00:00+00:00) -&gt; HTTP 200 Accepted
+  $ consul kv put config/participation-service/fault-mode error
+  PATCH -&gt; HTTP 202, версія 4, новий час 2026-11-01T16:00:00+00:00
+  $ consul kv put config/participation-service/fault-mode none
+    +  0.0 с  Крок 1 (calendar): новий час збережено як версію 4, попередній час — у даних компенсації; EventRescheduled.v1 записано в outbox
+    +  4.4 с  Збій: повідомлення EventRescheduled.v1 потрапило в DLQ черги participation.calendar-events (причина: delivery_limit)
+    +  4.4 с  Компенсація: подія v5 Scheduled, EventRescheduleReverted.v1 записано в outbox для учасників
+  participation: Помилка обробки EventRescheduled.v1 2c809d83-abcd-45e4-8770-795170cd50e7, спроба 1 з 4: імітований збій запису під час EventRescheduled.v1 (fault-mode
+  participation: Помилка обробки EventRescheduled.v1 2c809d83-abcd-45e4-8770-795170cd50e7, спроба 2 з 4: імітований збій запису під час EventRescheduled.v1 (fault-mode
+  participation: Помилка обробки EventRescheduled.v1 2c809d83-abcd-45e4-8770-795170cd50e7, спроба 3 з 4: імітований збій запису під час EventRescheduled.v1 (fault-mode
+  participation: Помилка обробки EventRescheduled.v1 2c809d83-abcd-45e4-8770-795170cd50e7, спроба 4 з 4: імітований збій запису під час EventRescheduled.v1 (fault-mode
+  подія: v5 2026-11-01T13:00:00+00:00; запрошення bob-c75099: Accepted v5
+  [OK] час події відновлено, відповідь Accepted збережено</pre></div></html>

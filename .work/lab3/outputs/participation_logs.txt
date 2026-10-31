@@ -1,0 +1,12 @@
+2026-10-31 10:34:43,555 INFO participation-service@38b426dc74e6 [participation] Дублікат EventCreated.v1 75eeee92-1547-4fd0-957b-418393209c42 пропущено (inbox)
+2026-10-31 10:34:47,712 WARNING participation-service@38b426dc74e6 [messaging] Помилка обробки EventRescheduled.v1 2c809d83-abcd-45e4-8770-795170cd50e7, спроба 1 з 4: імітований збій запису під час EventRescheduled.v1 (fault-mode=error)
+2026-10-31 10:34:48,721 WARNING participation-service@38b426dc74e6 [messaging] Помилка обробки EventRescheduled.v1 2c809d83-abcd-45e4-8770-795170cd50e7, спроба 2 з 4: імітований збій запису під час EventRescheduled.v1 (fault-mode=error)
+2026-10-31 10:34:49,754 WARNING participation-service@38b426dc74e6 [messaging] Помилка обробки EventRescheduled.v1 2c809d83-abcd-45e4-8770-795170cd50e7, спроба 3 з 4: імітований збій запису під час EventRescheduled.v1 (fault-mode=error)
+2026-10-31 10:34:50,764 WARNING participation-service@38b426dc74e6 [messaging] Помилка обробки EventRescheduled.v1 2c809d83-abcd-45e4-8770-795170cd50e7, спроба 4 з 4: імітований збій запису під час EventRescheduled.v1 (fault-mode=error)
+2026-10-31 10:34:57,457 WARNING participation-service@38b426dc74e6 [messaging] Помилка обробки EventCreated.v1 b6255744-d422-4d10-b85e-713fcb541712, спроба 1 з 4: імітований збій запису під час EventCreated.v1 (fault-mode=error)
+2026-10-31 10:34:58,466 WARNING participation-service@38b426dc74e6 [messaging] Помилка обробки EventCreated.v1 b6255744-d422-4d10-b85e-713fcb541712, спроба 2 з 4: імітований збій запису під час EventCreated.v1 (fault-mode=error)
+2026-10-31 10:34:59,471 WARNING participation-service@38b426dc74e6 [messaging] Помилка обробки EventCreated.v1 b6255744-d422-4d10-b85e-713fcb541712, спроба 3 з 4: імітований збій запису під час EventCreated.v1 (fault-mode=error)
+2026-10-31 10:35:00,475 WARNING participation-service@38b426dc74e6 [messaging] Помилка обробки EventCreated.v1 b6255744-d422-4d10-b85e-713fcb541712, спроба 4 з 4: імітований збій запису під час EventCreated.v1 (fault-mode=error)
+2026-10-31 10:35:01,714 INFO participation-service@38b426dc74e6 [participation] EventCancelled 39e4ccda-4270-4f17-9ea5-b3448c495af4 (SagaCompensation): відкликано 0, без сповіщення 0
+2026-10-31 10:35:16,299 WARNING participation-service@38b426dc74e6 [participation] fault-mode=delay: обробку EventCreated.v1 відкладено на 45.0 с
+2026-10-31 10:36:01,327 INFO participation-service@38b426dc74e6 [participation] EventCancelled 4b1cbd65-7249-45e3-9b2a-057a86c3bfc5 (SagaCompensation): відкликано 0, без сповіщення 1

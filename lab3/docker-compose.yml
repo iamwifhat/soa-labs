@@ -1,0 +1,137 @@
+name: calendar-lab3
+
+# Спільні налаштування мікросервісів: адреси інфраструктури всередині мережі Compose.
+x-service: &service
+  restart: unless-stopped
+  networks: [calendar-net]
+
+x-service-env: &service-env
+  CONSUL_URL: http://consul:8500
+  RABBITMQ_URL: amqp://calendar:calendar@rabbitmq:5672/
+
+x-db: &db
+  image: postgres:16-alpine
+  restart: unless-stopped
+  networks: [calendar-net]
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+    interval: 5s
+    timeout: 3s
+    retries: 10
+
+services:
+  # ---------- Інфраструктура ----------
+  consul:
+    image: hashicorp/consul:1.19
+    command: agent -dev -client=0.0.0.0 -ui -log-level=warn
+    ports: ["8500:8500"]
+    networks: [calendar-net]
+    healthcheck:
+      test: ["CMD", "consul", "members"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  gateway:
+    image: traefik:v3.1
+    command:
+      - --entrypoints.web.address=:80
+      - --api.dashboard=true
+      - --api.insecure=true
+      - --providers.consulcatalog=true
+      - --providers.consulcatalog.endpoint.address=consul:8500
+      - --providers.consulcatalog.exposedbydefault=false
+      - --providers.consulcatalog.refreshinterval=3s
+      - --accesslog=true
+      - --accesslog.format=common
+    ports:
+      - "8080:80"     # єдина точка входу для клієнтів
+      - "8081:8080"   # панель Traefik
+    networks: [calendar-net]
+    depends_on:
+      consul: { condition: service_healthy }
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    hostname: rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: calendar
+      RABBITMQ_DEFAULT_PASS: calendar
+    ports: ["15672:15672"]
+    volumes: [rabbitmq-data:/var/lib/rabbitmq]
+    networks: [calendar-net]
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # ---------- Власні бази даних сервісів ----------
+  calendar-db:
+    <<: *db
+    environment: { POSTGRES_DB: calendar, POSTGRES_USER: calendar, POSTGRES_PASSWORD: calendar }
+    volumes: [calendar-db-data:/var/lib/postgresql/data]
+
+  participation-db:
+    <<: *db
+    environment: { POSTGRES_DB: participation, POSTGRES_USER: participation, POSTGRES_PASSWORD: participation }
+    volumes: [participation-db-data:/var/lib/postgresql/data]
+
+  notification-db:
+    <<: *db
+    environment: { POSTGRES_DB: notification, POSTGRES_USER: notification, POSTGRES_PASSWORD: notification }
+    volumes: [notification-db-data:/var/lib/postgresql/data]
+
+  # ---------- Мікросервіси (порти назовні не відкриваються, доступ лише через шлюз) ----------
+  calendar-service:
+    <<: *service
+    build: { context: ., dockerfile: services/calendar-service/Dockerfile }
+    image: calendar-lab3/calendar-service:3.0
+    environment:
+      <<: *service-env
+      SERVICE_NAME: calendar-service
+      GATEWAY_PREFIX: /api/calendar
+      SAGA_TIMEOUT_SECONDS: "30"     # дедлайн відповіді учасника SAGA
+      DATABASE_URL: postgresql://calendar:calendar@calendar-db:5432/calendar
+    depends_on:
+      consul: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+      calendar-db: { condition: service_healthy }
+
+  participation-service:
+    <<: *service
+    build: { context: ., dockerfile: services/participation-service/Dockerfile }
+    image: calendar-lab3/participation-service:3.0
+    environment:
+      <<: *service-env
+      SERVICE_NAME: participation-service
+      GATEWAY_PREFIX: /api/participation
+      SLOW_CONSUMER_SECONDS: "45"    # затримка в режимі fault-mode=delay (більша за дедлайн SAGA)
+      DATABASE_URL: postgresql://participation:participation@participation-db:5432/participation
+    depends_on:
+      consul: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+      participation-db: { condition: service_healthy }
+
+  notification-service:
+    <<: *service
+    build: { context: ., dockerfile: services/notification-service/Dockerfile }
+    image: calendar-lab3/notification-service:3.0
+    environment:
+      <<: *service-env
+      SERVICE_NAME: notification-service
+      GATEWAY_PREFIX: /api/notification
+      DATABASE_URL: postgresql://notification:notification@notification-db:5432/notification
+    depends_on:
+      consul: { condition: service_healthy }
+      rabbitmq: { condition: service_healthy }
+      notification-db: { condition: service_healthy }
+
+networks:
+  calendar-net:
+
+volumes:
+  rabbitmq-data:
+  calendar-db-data:
+  participation-db-data:
+  notification-db-data:

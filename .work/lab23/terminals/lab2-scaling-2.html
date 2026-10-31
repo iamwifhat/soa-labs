@@ -1,0 +1,29 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab2-scaling-2</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab2 — zsh</div><pre><span class="cmd">$ python3 scripts/scaling_demo.py lb consumers</span>
+=== Серверне балансування: Traefik розподіляє 30 запитів між екземплярами calendar-service ===
+  calendar-service@3a86e90ca126        10 запитів
+  calendar-service@3eec111afb7e        10 запитів
+  calendar-service@bc153a0142f9        10 запитів
+
+=== Клієнтське балансування: 18 ланцюжків, calendar-service обирає participation-service з Consul ===
+  calendar[3a86e90ca126] -&gt; participation[6eb84781ddf6]: 2
+  calendar[3a86e90ca126] -&gt; participation[96af07ccbab6]: 2
+  calendar[3a86e90ca126] -&gt; participation[c4e18832321b]: 2
+  calendar[3eec111afb7e] -&gt; participation[6eb84781ddf6]: 2
+  calendar[3eec111afb7e] -&gt; participation[96af07ccbab6]: 2
+  calendar[3eec111afb7e] -&gt; participation[c4e18832321b]: 2
+  calendar[bc153a0142f9] -&gt; participation[6eb84781ddf6]: 2
+  calendar[bc153a0142f9] -&gt; participation[96af07ccbab6]: 2
+  calendar[bc153a0142f9] -&gt; participation[c4e18832321b]: 2
+  Разом на екземпляри participation-service: 6eb84781ddf6=6, 96af07ccbab6=6, c4e18832321b=6
+
+=== Конкуруючі споживачі: 9 повідомлень EventCreated з однієї черги ===
+  participation-service@6eb84781ddf6   обробив 3
+  participation-service@96af07ccbab6   обробив 3
+  participation-service@c4e18832321b   обробив 3
+  Усього оброблено: 9 з 9</pre></div></html>

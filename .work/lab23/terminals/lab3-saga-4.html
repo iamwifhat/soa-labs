@@ -1,0 +1,21 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab3-saga-4</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab3 — zsh</div><pre><span class="cmd">$ python3 scripts/saga_demo.py   (продовження)</span>
+=== 7. SAGA CreateEvent: учасник не відповів до дедлайну -&gt; компенсація за таймаутом ===
+  $ consul kv put config/participation-service/fault-mode delay
+  скасування під час SAGA -&gt; HTTP 409: Подія бере участь у незавершеній SAGA 44c25d9f-2c11-4b22-9c0e-acc584b50d7f; повторіть пізніше
+  [OK] семантичне блокування відхиляє зміну під час SAGA (409)
+  $ consul kv put config/participation-service/fault-mode none
+  SAGA Compensated: таймаут 30 с: відповідь учасника не надійшла
+    +  0.0 с  Крок 1 (calendar): подію збережено зі статусом Pending; EventCreated.v1 записано в outbox у тій самій транзакції
+    + 30.7 с  Збій: таймаут 30 с: відповідь учасника не надійшла
+    + 30.7 с  Компенсація: подія v2 Cancelled, EventCancelled.v1 записано в outbox для учасників
+    + 45.3 с  Запізнілу відповідь InvitationsCreated.v1 проігноровано: SAGA вже у стані Compensated
+  запрошення, створені із запізненням: [&#x27;Revoked&#x27;]
+  [OK] запізнілу відповідь проігноровано, запрошення відкликано
+
+Перевірок: 12, успішних: 12</pre></div></html>

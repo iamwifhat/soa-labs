@@ -1,0 +1,27 @@
+2026-10-31 10:34:42,472 INFO calendar-service@0448213caf1c [saga] SAGA 11911d95-cf6d-4417-81c5-4e2253140bab: Крок 1 (calendar): подію збережено зі статусом Pending; EventCreated.v1 записано в outbox у тій самій транзакції
+2026-10-31 10:34:42,798 INFO calendar-service@0448213caf1c [saga] SAGA 11911d95-cf6d-4417-81c5-4e2253140bab: Крок 2 (participation): отримано InvitationsCreated.v1 від participation-service
+2026-10-31 10:34:42,798 INFO calendar-service@0448213caf1c [saga] SAGA 11911d95-cf6d-4417-81c5-4e2253140bab: SAGA завершено: подія v2 Scheduled; EventConfirmed.v1 записано в outbox
+2026-10-31 10:34:43,829 INFO calendar-service@0448213caf1c [saga] SAGA 5df663ae-fe63-4c92-acb4-2664bf14594d: Крок 1 (calendar): новий час збережено як версію 3, попередній час — у даних компенсації; EventRescheduled.v1 записано в outbox
+2026-10-31 10:34:44,330 INFO calendar-service@0448213caf1c [saga] SAGA 5df663ae-fe63-4c92-acb4-2664bf14594d: Крок 2 (participation): отримано InvitationsRescheduled.v1 від participation-service
+2026-10-31 10:34:44,330 INFO calendar-service@0448213caf1c [saga] SAGA 5df663ae-fe63-4c92-acb4-2664bf14594d: SAGA завершено: подія v3 Scheduled; EventRescheduleConfirmed.v1 записано в outbox
+2026-10-31 10:34:47,400 INFO calendar-service@0448213caf1c [saga] SAGA 952aa33b-ce6f-484a-a4a8-c85f5c476bb1: Крок 1 (calendar): новий час збережено як версію 4, попередній час — у даних компенсації; EventRescheduled.v1 записано в outbox
+2026-10-31 10:34:51,776 INFO calendar-service@0448213caf1c [saga] SAGA 952aa33b-ce6f-484a-a4a8-c85f5c476bb1: Збій: повідомлення EventRescheduled.v1 потрапило в DLQ черги participation.calendar-events (причина: delivery_limit)
+2026-10-31 10:34:51,776 INFO calendar-service@0448213caf1c [saga] SAGA 952aa33b-ce6f-484a-a4a8-c85f5c476bb1: Компенсація: подія v5 Scheduled, EventRescheduleReverted.v1 записано в outbox для учасників
+2026-10-31 10:34:57,154 INFO calendar-service@0448213caf1c [saga] SAGA e17b6438-281b-4298-acd5-49df3d909002: Крок 1 (calendar): подію збережено зі статусом Pending; EventCreated.v1 записано в outbox у тій самій транзакції
+2026-10-31 10:35:01,485 INFO calendar-service@0448213caf1c [saga] SAGA e17b6438-281b-4298-acd5-49df3d909002: Збій: повідомлення EventCreated.v1 потрапило в DLQ черги participation.calendar-events (причина: delivery_limit)
+2026-10-31 10:35:01,485 INFO calendar-service@0448213caf1c [saga] SAGA e17b6438-281b-4298-acd5-49df3d909002: Компенсація: подія v2 Cancelled, EventCancelled.v1 записано в outbox для учасників
+2026-10-31 10:35:04,489 WARNING calendar-service@0448213caf1c [messaging] З'єднання з RabbitMQ втрачено; перепідключення
+2026-10-31 10:35:05,748 INFO calendar-service@0448213caf1c [saga] SAGA a7bf27ad-2e77-4b96-82ea-305b01547127: Крок 1 (calendar): подію збережено зі статусом Pending; EventCreated.v1 записано в outbox у тій самій транзакції
+2026-10-31 10:35:05,977 WARNING calendar-service@0448213caf1c [outbox] Публікацію з outbox відкладено: <aio_pika.channel.Channel object at 0xffff7bb37170> closed
+2026-10-31 10:35:06,492 WARNING calendar-service@0448213caf1c [messaging] Перепідключення до RabbitMQ не вдалося: [Errno 111] Connection refused
+2026-10-31 10:35:08,287 WARNING calendar-service@0448213caf1c [outbox] Публікацію з outbox відкладено: <aio_pika.channel.Channel object at 0xffff7bb37170> closed
+2026-10-31 10:35:08,494 WARNING calendar-service@0448213caf1c [messaging] Перепідключення до RabbitMQ не вдалося: [Errno 111] Connection refused
+2026-10-31 10:35:10,495 WARNING calendar-service@0448213caf1c [messaging] Перепідключення до RabbitMQ не вдалося: [Errno 111] Connection refused
+2026-10-31 10:35:10,590 WARNING calendar-service@0448213caf1c [outbox] Публікацію з outbox відкладено: <aio_pika.channel.Channel object at 0xffff7bb37170> closed
+2026-10-31 10:35:12,514 INFO calendar-service@0448213caf1c [messaging] З'єднання з RabbitMQ відновлено, споживачів відновлено: 2
+2026-10-31 10:35:12,948 INFO calendar-service@0448213caf1c [saga] SAGA a7bf27ad-2e77-4b96-82ea-305b01547127: Крок 2 (participation): отримано InvitationsCreated.v1 від participation-service
+2026-10-31 10:35:12,949 INFO calendar-service@0448213caf1c [saga] SAGA a7bf27ad-2e77-4b96-82ea-305b01547127: SAGA завершено: подія v2 Scheduled; EventConfirmed.v1 записано в outbox
+2026-10-31 10:35:16,099 INFO calendar-service@0448213caf1c [saga] SAGA 44c25d9f-2c11-4b22-9c0e-acc584b50d7f: Крок 1 (calendar): подію збережено зі статусом Pending; EventCreated.v1 записано в outbox у тій самій транзакції
+2026-10-31 10:35:46,795 INFO calendar-service@0448213caf1c [saga] SAGA 44c25d9f-2c11-4b22-9c0e-acc584b50d7f: Збій: таймаут 30 с: відповідь учасника не надійшла
+2026-10-31 10:35:46,796 INFO calendar-service@0448213caf1c [saga] SAGA 44c25d9f-2c11-4b22-9c0e-acc584b50d7f: Компенсація: подія v2 Cancelled, EventCancelled.v1 записано в outbox для учасників
+2026-10-31 10:36:01,391 INFO calendar-service@0448213caf1c [saga] SAGA 44c25d9f-2c11-4b22-9c0e-acc584b50d7f: Запізнілу відповідь InvitationsCreated.v1 проігноровано: SAGA вже у стані Compensated

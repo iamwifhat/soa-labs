@@ -1,0 +1,28 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab3-saga-1</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab3 — zsh</div><pre><span class="cmd">$ python3 scripts/saga_demo.py</span>
+  $ consul kv put config/participation-service/fault-mode none
+
+=== 1. SAGA CreateEvent: успішне виконання ===
+  POST /events -&gt; HTTP 202, подія Pending v1
+  [OK] подію прийнято (202) у стані Pending
+  SAGA CreateEvent: Completed
+    +  0.0 с  Крок 1 (calendar): подію збережено зі статусом Pending; EventCreated.v1 записано в outbox у тій самій транзакції
+    +  0.3 с  Крок 2 (participation): отримано InvitationsCreated.v1 від participation-service
+    +  0.3 с  SAGA завершено: подія v2 Scheduled; EventConfirmed.v1 записано в outbox
+  подія: Scheduled v2
+  [OK] SAGA завершено, подія Scheduled v2
+  outbox #1: EventCreated.v1    опубліковано 2026-10-31T10:34:42.484563+00:00
+  outbox #2: EventConfirmed.v1  опубліковано 2026-10-31T10:34:43.094451+00:00
+  [OK] обидва повідомлення пройшли через outbox
+  лист для bob-c75099: Запрошення на «Планування спринту» 01.11.2026 12:00 [Sent]
+  [OK] лист надіслано лише після EventConfirmed
+
+=== 2. Transactional Inbox: повторна доставка того самого повідомлення ===
+  повторно опубліковано EventCreated.v1 75eeee92-1547-4fd0-957b-418393209c42 -&gt; routed=True
+  participation: Дублікат EventCreated.v1 75eeee92-1547-4fd0-957b-418393209c42 пропущено (inbox)
+  [OK] дублікат відсіяно inbox, запрошень не додалося</pre></div></html>

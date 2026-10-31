@@ -1,0 +1,24 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab2-scaling-3</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab2 — zsh</div><pre><span class="cmd">$ python3 scripts/scaling_demo.py failover down</span>
+=== Відмова екземпляра: аварійна зупинка одного participation-service ===
+<span class="cmd">$ docker kill 6eb84781ddf6</span>
+  запит 1: HTTP 200, participation[96af07ccbab6], 3051 мс, у Consul справних: 3
+  запит 2: HTTP 200, participation[96af07ccbab6], 19 мс, у Consul справних: 2
+  запит 3: HTTP 200, participation[c4e18832321b], 30 мс, у Consul справних: 2
+  запит 4: HTTP 200, participation[c4e18832321b], 22 мс, у Consul справних: 2
+  запит 5: HTTP 200, participation[96af07ccbab6], 27 мс, у Consul справних: 2
+  запит 6: HTTP 200, participation[96af07ccbab6], 20 мс, у Consul справних: 2
+  запит 7: HTTP 200, participation[c4e18832321b], 9 мс, у Consul справних: 2
+  запит 8: HTTP 200, participation[96af07ccbab6], 14 мс, у Consul справних: 2
+<span class="cmd">$ docker start 6eb84781ddf6</span>
+  Екземпляр повернувся до каталогу: справних 3
+
+=== Зменшення кількості екземплярів до одного (зняття з реєстрації під час зупинки) ===
+<span class="cmd">$ docker compose up -d --scale calendar-service=1 --scale participation-service=1</span>
+  calendar-service: справних екземплярів 1
+  participation-service: справних екземплярів 1</pre></div></html>

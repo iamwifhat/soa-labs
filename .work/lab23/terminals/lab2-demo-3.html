@@ -1,0 +1,29 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab2-demo-3</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab2 — zsh</div><pre><span class="cmd">$ python3 scripts/demo.py   (продовження)</span>
+=== 6. Оркестрація: перенесення події координатором ===
+  PATCH -&gt; HTTP 200, нова версія 2, координатор calendar-service@3eec111afb7e
+  крок reset-invitations  DONE  participation-service@c4e18832321b  {&quot;eventId&quot;: &quot;25532b36-56b8-4402-a234-87400e7cf259&quot;, &quot;eventVersion&quot;: 2, &quot;updated&quot;: 2, &quot;resetResponses&quot;: 2}
+  крок move-reminders     DONE  notification-service@7e23f974fb03  {&quot;eventId&quot;: &quot;25532b36-56b8-4402-a234-87400e7cf259&quot;, &quot;eventVersion&quot;: 2, &quot;moved&quot;: 1, &quot;awaitingReconfirmation&quot;: 1}
+  [OK] усі кроки оркестрації виконано
+  [OK] відповідь bob скинуто до Pending для нової версії
+
+=== 7. Захист від застарілих змін ===
+  PATCH з If-Match &quot;1&quot; -&gt; HTTP 412: Очікувана версія 1 не збігається з поточною 2
+  [OK] застаріла версія відхилена (412)
+  відповідь bob на версію 1 -&gt; HTTP 409: Відповідь стосується версії події 1, актуальна версія 2
+  [OK] відповідь на застарілу версію відхилена (409)
+  подія із завершенням до початку -&gt; HTTP 422: Початок події має передувати завершенню
+  [OK] порушення інваріанту часу відхилено (422)
+
+=== 8. Хореографія: скасування події ===
+  POST /cancel -&gt; HTTP 200, статус Cancelled, версія 3
+  participation: відкликано 2 запрошення
+  notification: EventCancelled -&gt; carol-62d8b1: Подію «Рев&#x27;ю архітектури» скасовано
+  [OK] запрошення відкликано, адресатів сповіщено
+
+Перевірок: 15, успішних: 15</pre></div></html>

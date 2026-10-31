@@ -1,0 +1,3 @@
+2026-10-31 10:18:11,857 WARNING calendar-service@3eec111afb7e [http-client] Circuit breaker notification-service: OPEN після 3 відмов
+2026-10-31 10:18:26,648 INFO calendar-service@3eec111afb7e [http-client] Circuit breaker notification-service: HALF_OPEN, пробний виклик
+2026-10-31 10:18:26,652 INFO calendar-service@3eec111afb7e [http-client] Circuit breaker notification-service: CLOSED

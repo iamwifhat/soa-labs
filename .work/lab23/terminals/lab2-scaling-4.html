@@ -1,0 +1,22 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab2-scaling-4</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab2 — zsh</div><pre><span class="cmd">$ python3 scripts/scaling_demo.py breaker</span>
+=== Circuit Breaker: недоступний notification-service ===
+<span class="cmd">$ docker compose stop notification-service</span>
+  запит 1:    13 мс, breaker=CLOSED    notification-service: немає справних екземплярів
+  запит 2:     6 мс, breaker=CLOSED    notification-service: немає справних екземплярів
+  запит 3:     6 мс, breaker=OPEN      notification-service: немає справних екземплярів
+  запит 4:     4 мс, breaker=OPEN      notification-service: circuit breaker OPEN
+  запит 5:     4 мс, breaker=OPEN      notification-service: circuit breaker OPEN
+<span class="cmd">$ docker compose start notification-service</span>
+  через 10 с:    12 мс, breaker=CLOSED    дані отримано
+  наступний:     5 мс, breaker=CLOSED    дані отримано
+
+<span class="cmd">$ docker compose logs calendar-service | grep &#x27;Circuit breaker&#x27;</span>
+10:18:11 calendar-service@3eec111afb7e: Circuit breaker notification-service: OPEN після 3 відмов
+10:18:26 calendar-service@3eec111afb7e: Circuit breaker notification-service: HALF_OPEN, пробний виклик
+10:18:26 calendar-service@3eec111afb7e: Circuit breaker notification-service: CLOSED</pre></div></html>

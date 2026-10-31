@@ -1,0 +1,415 @@
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "Participation Service",
+        "description": "Контекст «Участь у подіях»: запрошення, відповіді адресатів і кроки SAGA.",
+        "version": "3.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api/participation"
+        }
+    ],
+    "paths": {
+        "/health": {
+            "get": {
+                "tags": [
+                    "service"
+                ],
+                "summary": "Стан екземпляра для Consul і Docker",
+                "operationId": "health_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/invitations": {
+            "get": {
+                "tags": [
+                    "invitations"
+                ],
+                "summary": "Запрошення користувача або всі запрошення події для організатора",
+                "operationId": "list_invitations_invitations_get",
+                "parameters": [
+                    {
+                        "name": "eventId",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string",
+                                    "format": "uuid"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Eventid"
+                        }
+                    },
+                    {
+                        "name": "X-User-Id",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Ідентифікатор користувача; до впровадження OIDC у ЛР5 його передає клієнт",
+                            "title": "X-User-Id"
+                        },
+                        "description": "Ідентифікатор користувача; до впровадження OIDC у ЛР5 його передає клієнт"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    },
+                                    "title": "Response List Invitations Invitations Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/invitations/{invitation_id}": {
+            "get": {
+                "tags": [
+                    "invitations"
+                ],
+                "summary": "Get Invitation",
+                "operationId": "get_invitation_invitations__invitation_id__get",
+                "parameters": [
+                    {
+                        "name": "invitation_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Invitation Id"
+                        }
+                    },
+                    {
+                        "name": "X-User-Id",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Ідентифікатор користувача; до впровадження OIDC у ЛР5 його передає клієнт",
+                            "title": "X-User-Id"
+                        },
+                        "description": "Ідентифікатор користувача; до впровадження OIDC у ЛР5 його передає клієнт"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "title": "Response Get Invitation Invitations  Invitation Id  Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/invitations/{invitation_id}/respond": {
+            "post": {
+                "tags": [
+                    "invitations"
+                ],
+                "summary": "Прийняти або відхилити запрошення",
+                "operationId": "respond_invitations__invitation_id__respond_post",
+                "parameters": [
+                    {
+                        "name": "invitation_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Invitation Id"
+                        }
+                    },
+                    {
+                        "name": "X-User-Id",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "description": "Ідентифікатор користувача; до впровадження OIDC у ЛР5 його передає клієнт",
+                            "title": "X-User-Id"
+                        },
+                        "description": "Ідентифікатор користувача; до впровадження OIDC у ЛР5 його передає клієнт"
+                    },
+                    {
+                        "name": "Idempotency-Key",
+                        "in": "header",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Idempotency-Key"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ResponseIn"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "title": "Response Respond Invitations  Invitation Id  Respond Post"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/internal/events/{event_id}/invitations": {
+            "get": {
+                "tags": [
+                    "internal"
+                ],
+                "summary": "Event Invitations",
+                "operationId": "event_invitations_internal_events__event_id__invitations_get",
+                "parameters": [
+                    {
+                        "name": "event_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "title": "Event Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    },
+                                    "title": "Response Event Invitations Internal Events  Event Id  Invitations Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/diagnostics/inbox": {
+            "get": {
+                "tags": [
+                    "diagnostics"
+                ],
+                "summary": "Кількість оброблених повідомлень і стан outbox",
+                "operationId": "diagnostics_inbox_diagnostics_inbox_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "title": "Response Diagnostics Inbox Diagnostics Inbox Get"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/diagnostics/chain": {
+            "post": {
+                "tags": [
+                    "diagnostics"
+                ],
+                "summary": "Diagnostics Chain",
+                "operationId": "diagnostics_chain_diagnostics_chain_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "title": "Payload"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "title": "Response Diagnostics Chain Diagnostics Chain Post"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "ResponseIn": {
+                "properties": {
+                    "decision": {
+                        "type": "string",
+                        "title": "Decision"
+                    },
+                    "eventVersion": {
+                        "type": "integer",
+                        "title": "Eventversion"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "decision",
+                    "eventVersion"
+                ],
+                "title": "ResponseIn"
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            }
+        }
+    }
+}
