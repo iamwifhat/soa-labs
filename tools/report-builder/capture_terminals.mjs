@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 const require = createRequire('/Users/iamtoyvovich/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/package.json');
 const { chromium } = require('playwright');
-const dir = path.join(path.dirname(fileURLToPath(import.meta.url)), 'terminals');
+const dir = path.join(path.dirname(fileURLToPath(import.meta.url)), 'build', 'terminals');
 const browser = await chromium.launch({ headless: true, executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' });
 const page = await browser.newPage({ viewport: { width: 1000, height: 800 }, deviceScaleFactor: 2.5 });
 for (const file of (await readdir(dir)).filter(f => f.endsWith('.html')).sort()) {

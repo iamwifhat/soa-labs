@@ -4,7 +4,7 @@ from pathlib import Path
 from report_lib import CODE, FIG, H, P, PAGE, PC, SRC, SUB, TAB, ROOT, Report
 
 HERE = Path(__file__).resolve().parent
-F, T, S = HERE / "figures", HERE / "terminals", HERE / "screens"
+F, T, S = ROOT / "lab2" / "docs" / "diagrams", HERE / "build" / "terminals", HERE / "build" / "screens"
 # Лістинг Dockerfile береться з коду ЛР2 без коментарів.
 DOCKERFILE = "\n".join(
     line for line in (ROOT / "lab2/services/calendar-service/Dockerfile").read_text().splitlines()
@@ -425,7 +425,7 @@ blocks = [
 ]
 
 if __name__ == "__main__":
-    output = ROOT / "ЛР2_SOA_КН-61мп_Заєць.docx"
+    output = ROOT / "lab2" / "ЛР2_SOA_КН-61мп_Заєць.docx"
     counts = Report(2, "Лабораторна робота 2 Оркестрація та хореографія мікросервісів",
                     "Хмарна інформаційна система для календаря користувача Варіант 4").render(blocks, output)
     print(output.name, counts)

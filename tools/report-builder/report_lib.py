@@ -16,7 +16,7 @@ from docx.shared import Cm, Emu, Pt
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[2]
-TEMPLATE = ROOT / "ЛР1_SOA_КН-61мп_Заєць.docx"
+TEMPLATE = ROOT / "lab1" / "ЛР1_SOA_КН-61мп_Заєць.docx"
 COVER_LAST_INDEX = 29          # абзац із розривом секції титульної сторінки ЛР1
 MAX_IMAGE_HEIGHT = Cm(19.5)
 ACCESS_DATE = "31.10.2026"

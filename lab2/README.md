@@ -1,5 +1,7 @@
 # ЛР2. Оркестрація та хореографія мікросервісів календаря
 
+Протокол: [ЛР2_SOA_КН-61мп_Заєць.docx](ЛР2_SOA_КН-61мп_Заєць.docx).
+
 Реалізація контекстів, спроєктованих у ЛР1 (варіант 4 — хмарний календар користувача):
 
 | Сервіс | Контекст ЛР1 | Власна БД | Що робить |
@@ -53,6 +55,9 @@ docker compose up -d --scale calendar-service=3 --scale participation-service=3
 ```
 common/soa_common/      спільні механізми: Consul, балансування + Circuit Breaker, RabbitMQ, PostgreSQL, HTTP
 services/<name>/        Dockerfile та код сервісу (domain.py, store.py, main.py, schema.sql)
-docs/openapi/           експортовані контракти OpenAPI
 scripts/                демонстраційні та перевірочні сценарії
+docs/openapi/           експортовані контракти OpenAPI
+docs/diagrams/          схеми з протоколу (PNG і SVG)
+docs/test-output/       вивід demo.py і scaling_demo.py та журнали сервісів, наведені в протоколі
+docs/screenshots/       знімки Consul, Traefik і RabbitMQ під час роботи трьох екземплярів
 ```

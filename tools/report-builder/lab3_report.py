@@ -4,7 +4,7 @@ from pathlib import Path
 from report_lib import CODE, FIG, H, P, PAGE, PC, SRC, SUB, TAB, ROOT, Report
 
 HERE = Path(__file__).resolve().parent
-F, T, S = HERE / "figures", HERE / "terminals", HERE / "screens"
+F, T, S = ROOT / "lab3" / "docs" / "diagrams", HERE / "build" / "terminals", HERE / "build" / "screens"
 
 blocks = [
     H("1. Мета роботи та постановка задачі"),
@@ -318,7 +318,7 @@ blocks = [
 ]
 
 if __name__ == "__main__":
-    output = ROOT / "ЛР3_SOA_КН-61мп_Заєць.docx"
+    output = ROOT / "lab3" / "ЛР3_SOA_КН-61мп_Заєць.docx"
     counts = Report(3, "Лабораторна робота 3 Забезпечення транзакційності у взаємодії інтелектуальних сервісів",
                     "Хмарна інформаційна система для календаря користувача Варіант 4").render(blocks, output)
     print(output.name, counts)

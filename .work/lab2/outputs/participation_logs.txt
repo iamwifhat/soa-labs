@@ -1,3 +1,0 @@
-2026-10-31 10:15:27,697 INFO participation-service@6e2000d0fff2 [participation] EventCreated 6768925e-a08a-4965-bf87-90c865c8d39e: створено запрошень 2 з 2
-2026-10-31 10:15:29,305 INFO participation-service@6e2000d0fff2 [participation] Крок перенесення 6768925e-a08a-4965-bf87-90c865c8d39e v2: оновлено 2, скинуто відповідей 2
-2026-10-31 10:15:41,613 INFO participation-service@6e2000d0fff2 [participation] EventCreated 6062037e-806f-4a0d-abd6-b46488fbd521: створено запрошень 1 з 1

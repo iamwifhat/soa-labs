@@ -1,5 +1,7 @@
 # ЛР3. Транзакційність: Transactional Outbox/Inbox і SAGA
 
+Протокол: [ЛР3_SOA_КН-61мп_Заєць.docx](ЛР3_SOA_КН-61мп_Заєць.docx).
+
 Розвиток системи з ЛР2 (ті самі три сервіси, шлюз Traefik, Consul, RabbitMQ, окремі PostgreSQL).
 Синхронну оркестрацію перенесення з ЛР2 замінено асинхронною SAGA з компенсаціями.
 
@@ -40,3 +42,15 @@ curl -X PUT localhost:8500/v1/kv/config/participation-service/fault-mode -d erro
    Немає відповіді 30 с → та сама компенсація; запізнілу відповідь координатор ігнорує.
 
 Стан SAGA та її журнал: `GET /api/calendar/sagas/{sagaId}`.
+
+## Структура
+
+```
+common/soa_common/      механізми ЛР2 + outbox.py (Outbox, Inbox, ретранслятор) і config.py (Consul KV)
+services/<name>/        Dockerfile та код сервісу; координатор SAGA — services/calendar-service/app/saga.py
+scripts/saga_demo.py    сценарій перевірки
+docs/openapi/           експортовані контракти OpenAPI
+docs/diagrams/          схеми з протоколу (PNG і SVG)
+docs/test-output/       вивід saga_demo.py і журнали сервісів, наведені в протоколі
+docs/screenshots/       знімок черг RabbitMQ
+```

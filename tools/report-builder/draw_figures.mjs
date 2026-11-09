@@ -7,7 +7,10 @@ import { fileURLToPath } from 'node:url';
 const require = createRequire('/Users/iamtoyvovich/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright/package.json');
 const { chromium } = require('playwright');
 const work = path.dirname(fileURLToPath(import.meta.url));
-const out = path.join(work, 'figures');
+const root = path.resolve(work, '..', '..');
+// HTML для рендерингу лишається в build/figures, SVG і PNG — у docs/diagrams відповідної лабораторної.
+const out = path.join(work, 'build', 'figures');
+const diagrams = name => path.join(root, name.split('-')[0], 'docs', 'diagrams');
 await mkdir(out, { recursive: true });
 
 const W = 1800;
@@ -263,7 +266,7 @@ try {
   for (const [name, draw] of Object.entries(drawings)) {
     const { height, content } = svg(0, draw);
     const html = '<!doctype html><html lang="uk"><meta charset="utf-8"><title>Схема</title><style>html,body{margin:0;padding:0;background:white}svg{display:block}</style>' + content + '</html>';
-    await writeFile(path.join(out, name + '.svg'), content);
+    await writeFile(path.join(diagrams(name), name + '.svg'), content);
     await writeFile(path.join(out, name + '.html'), html);
     const page = await browser.newPage({ viewport: { width: W, height }, deviceScaleFactor: 1.5 });
     await page.goto('file://' + path.join(out, name + '.html'));
@@ -284,7 +287,7 @@ try {
       return issues;
     });
     audits.push({ name, height, errors });
-    await page.screenshot({ path: path.join(out, name + '.png') });
+    await page.screenshot({ path: path.join(diagrams(name), name + '.png') });
     await page.close();
   }
 } finally { await browser.close(); }

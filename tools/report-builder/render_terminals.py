@@ -1,14 +1,14 @@
 """Готує HTML-сторінки «вікно терміналу» зі збереженого виводу перевірочних сценаріїв ЛР2 і ЛР3.
 
-Текст береться без змін із файлів .work/lab2/outputs і .work/lab3/outputs; змінюється лише розбиття на частини.
+Текст береться без змін із файлів lab2/docs/test-output і lab3/docs/test-output; змінюється лише розбиття на частини.
 """
 import html
 import json
 import re
 from pathlib import Path
 
-WORK = Path(__file__).resolve().parent.parent
-OUT = Path(__file__).resolve().parent / "terminals"
+ROOT = Path(__file__).resolve().parents[2]
+OUT = Path(__file__).resolve().parent / "build" / "terminals"
 OUT.mkdir(exist_ok=True)
 
 
@@ -26,9 +26,9 @@ def total(text: str) -> str:
     return next(line for line in text.splitlines() if line.startswith("Перевірок:"))
 
 
-lab2_demo = (WORK / "lab2/outputs/demo.txt").read_text()
-lab2_part1 = (WORK / "lab2/outputs/scaling_part1.txt").read_text().strip("\n")
-lab2_part2 = (WORK / "lab2/outputs/scaling_part2.txt").read_text().strip("\n")
+lab2_demo = (ROOT / "lab2/docs/test-output/demo.txt").read_text()
+lab2_part1 = (ROOT / "lab2/docs/test-output/scaling_part1.txt").read_text().strip("\n")
+lab2_part2 = (ROOT / "lab2/docs/test-output/scaling_part2.txt").read_text().strip("\n")
 
 
 def stages(text: str) -> list[str]:
@@ -36,8 +36,8 @@ def stages(text: str) -> list[str]:
 
 
 s1, s2 = stages(lab2_part1), stages(lab2_part2)
-lab2_breaker = (WORK / "lab2/outputs/breaker_logs.txt").read_text().strip("\n")
-lab3_demo = (WORK / "lab3/outputs/saga_demo.txt").read_text()
+lab2_breaker = (ROOT / "lab2/docs/test-output/breaker_logs.txt").read_text().strip("\n")
+lab3_demo = (ROOT / "lab3/docs/test-output/saga_demo.txt").read_text()
 d2, d3 = sections(lab2_demo), sections(lab3_demo)
 first_kv = lab3_demo.strip("\n").splitlines()[0]
 

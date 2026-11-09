@@ -5,3 +5,4 @@ docs
 scripts
 *.md
 .env
+*.docx
