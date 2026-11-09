@@ -17,8 +17,8 @@
 
 ## Розгортання
 
-Потрібні Docker з Compose v2 (Docker Desktop) і Python 3.10+ для перевірочних скриптів; вільні порти 8080, 8081,
-8500 і 15672. ЛР2 і ЛР3 використовують ті самі порти, тому одночасно запускається лише одна з них.
+Потрібні Docker з Compose v2 (Docker Desktop) і Python 3.10+ для перевірочних скриптів. ЛР2 займає на хості порти
+8080, 8081, 8500 і 15672, ЛР3 — на 1000 більші (9080, 9081, 9500, 16672), тому обидві можна запускати одночасно.
 
 ```bash
 cd lab2
@@ -35,8 +35,13 @@ python3 scripts/saga_demo.py        # Outbox, Inbox, SAGA з компенсац�
 docker compose down -v
 ```
 
-Після запуску: API — http://localhost:8080/api/calendar/docs, Consul — http://localhost:8500,
-Traefik — http://localhost:8081, RabbitMQ — http://localhost:15672 (`calendar` / `calendar`).
+| Що | ЛР2 | ЛР3 |
+|---|---|---|
+| API (Swagger) | http://localhost:8080/api/calendar/docs | http://localhost:9080/api/calendar/docs |
+| Consul | http://localhost:8500 | http://localhost:9500 |
+| Traefik | http://localhost:8081 | http://localhost:9081 |
+| RabbitMQ (`calendar` / `calendar`) | http://localhost:15672 | http://localhost:16672 |
+
 Докладніше — у README кожної теки.
 
 ## Структура

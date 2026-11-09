@@ -1,5 +1,7 @@
 name: calendar-lab3
 
+# Порти на хості на 1000 більші, ніж у ЛР2, тому обидві лабораторні можуть працювати одночасно.
+
 # Спільні налаштування мікросервісів: адреси інфраструктури всередині мережі Compose.
 x-service: &service
   restart: unless-stopped
@@ -24,7 +26,7 @@ services:
   consul:
     image: hashicorp/consul:1.19
     command: agent -dev -client=0.0.0.0 -ui -log-level=warn
-    ports: ["8500:8500"]
+    ports: ["9500:8500"]
     networks: [calendar-net]
     healthcheck:
       test: ["CMD", "consul", "members"]
@@ -45,8 +47,8 @@ services:
       - --accesslog=true
       - --accesslog.format=common
     ports:
-      - "8080:80"     # єдина точка входу для клієнтів
-      - "8081:8080"   # панель Traefik
+      - "9080:80"     # єдина точка входу для клієнтів
+      - "9081:8080"   # панель Traefik
     networks: [calendar-net]
     depends_on:
       consul: { condition: service_healthy }
@@ -57,7 +59,7 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: calendar
       RABBITMQ_DEFAULT_PASS: calendar
-    ports: ["15672:15672"]
+    ports: ["16672:15672"]
     volumes: [rabbitmq-data:/var/lib/rabbitmq]
     networks: [calendar-net]
     healthcheck:

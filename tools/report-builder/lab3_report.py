@@ -156,7 +156,7 @@ blocks = [
       "кешується на 2 с, тому перемикається без перезапуску контейнерів; Consul KV тут виконує роль config "
       "service. Режим error викидає виняток після запису запрошень, режим delay затримує обробку на 45 с. Відмова "
       "застосовується лише до прямих кроків SAGA, бо компенсації мають виконуватися завжди."),
-    CODE("curl -X PUT localhost:8500/v1/kv/config/participation-service/fault-mode -d error"),
+    CODE("curl -X PUT localhost:9500/v1/kv/config/participation-service/fault-mode -d error"),
     P("Виняток відкочує локальну транзакцію учасника разом із записом inbox і вже вставленими запрошеннями. Обробник "
       "повертає повідомлення (nack), RabbitMQ доставляє його ще тричі, а після x-delivery-limit = 3 quorum-черга "
       "перекладає його в participation.calendar-events.dlq [13, 14]. Координатор підписаний на цю DLQ: отримавши "

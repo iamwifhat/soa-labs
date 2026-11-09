@@ -25,12 +25,19 @@ python3 scripts/saga_demo.py     # 7 сценаріїв, 12 автоматичн
 docker compose down -v
 ```
 
-ЛР2 і ЛР3 використовують ті самі порти (8080, 8081, 8500, 15672), тому одночасно запускається лише одна з них.
+ЛР3 відкриває на хості порти, на 1000 більші, ніж у ЛР2, тому обидві лабораторні можна запускати одночасно:
+
+| Адреса | Призначення |
+|---|---|
+| http://localhost:9080/api/calendar/docs | OpenAPI сервісу календаря (так само `/api/participation/docs`, `/api/notification/docs`) |
+| http://localhost:9081 | панель Traefik |
+| http://localhost:9500 | інтерфейс Consul |
+| http://localhost:16672 | RabbitMQ Management (`calendar` / `calendar`) |
 
 Режим збою вмикається без перезапуску сервісів:
 
 ```bash
-curl -X PUT localhost:8500/v1/kv/config/participation-service/fault-mode -d error
+curl -X PUT localhost:9500/v1/kv/config/participation-service/fault-mode -d error
 ```
 
 ## Потік SAGA CreateEvent

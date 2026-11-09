@@ -16,9 +16,10 @@ import urllib.request
 import uuid
 from datetime import datetime, timedelta, timezone
 
-GATEWAY = os.getenv("GATEWAY_URL", "http://localhost:8080")
-CONSUL = "http://localhost:8500"
-RABBIT = "http://localhost:15672"
+# Порти ЛР3 на хості (див. docker-compose.yml): на 1000 більші, ніж у ЛР2.
+GATEWAY = os.getenv("GATEWAY_URL", "http://localhost:9080")
+CONSUL = os.getenv("CONSUL_URL", "http://localhost:9500")
+RABBIT = os.getenv("RABBITMQ_UI_URL", "http://localhost:16672")
 RABBIT_AUTH = "Basic " + base64.b64encode(b"calendar:calendar").decode()
 CHECKS: list[tuple[str, bool]] = []
 
