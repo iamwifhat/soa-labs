@@ -1,4 +1,4 @@
-"""Збирання звітів ЛР2/ЛР3 на основі DOCX ЛР1: титульна сторінка, стилі SOA та колонтитули залишаються без змін.
+"""Збирання звітів ЛР2–ЛР4 на основі DOCX ЛР1: титульна сторінка, стилі SOA та колонтитули залишаються без змін.
 
 Вміст задається списком блоків; посилання [[fig:id]] і [[tab:id]] у тексті замінюються номерами рисунків і таблиць.
 """
@@ -54,7 +54,8 @@ def _breakable_url(url):
 
 
 class Report:
-    def __init__(self, lab_no: int, title: str, subject: str):
+    def __init__(self, lab_no: int, title: str, subject: str, access_date: str = ACCESS_DATE):
+        self.access_date = access_date
         self.doc = Document(TEMPLATE)
         body = self.doc.element.body
         children = list(body.iterchildren())
@@ -195,7 +196,7 @@ class Report:
             run.extend([r_pr, text_el])
             link.append(run)
             paragraph._p.append(link)
-            _set_run(paragraph.add_run(f" (дата звернення: {ACCESS_DATE})."))
+            _set_run(paragraph.add_run(f" (дата звернення: {self.access_date})."))
 
     def _drop_orphans(self):
         """Прибирає зображення, колонтитули й посилання видаленого тексту ЛР1, на які більше ніхто не посилається."""

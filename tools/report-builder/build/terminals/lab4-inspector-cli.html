@@ -1,0 +1,41 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab4-inspector-cli</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab4 — zsh</div><pre><span class="cmd">$ npx @modelcontextprotocol/inspector@2.12.0 --cli …</span>
+  list_calendars         readOnly               args: 
+  create_calendar        -                      args: name, time_zone
+  list_events            readOnly               args: calendar_id, status, limit
+  get_event              readOnly               args: event_id
+  event_overview         readOnly               args: event_id
+  schedule_event         -                      args: calendar_id, title, start_at, end_at, time_zone, invitee_user_ids, remind_before_minutes, wait_for_saga
+  update_event           -                      args: event_id, expected_version, title, start_at, end_at, time_zone, wait_for_saga
+  cancel_event           destructive            args: event_id, expected_version
+  get_saga               readOnly               args: saga_id
+  list_invitations       readOnly               args: event_id, limit
+  respond_to_invitation  idempotent             args: invitation_id, decision, event_version
+  list_notifications     readOnly               args: limit
+
+<span class="cmd">$ … --method resources/templates/list</span>
+  calendar://users/{user_id}/calendars       Календарі користувача
+  calendar://calendars/{calendar_id}/events  Події календаря
+  calendar://events/{event_id}               Подія
+  calendar://sagas/{saga_id}                 Журнал SAGA
+  calendar://openapi/{service}               OpenAPI сервісу
+
+<span class="cmd">$ … --method prompts/list</span>
+  schedule_meeting     (title, participants, start, duration_minutes, calendar_name)
+  reschedule_meeting   (event_title, new_start, new_end, calendar_name)
+  weekly_agenda        (calendar_name, days)
+
+<span class="cmd">$ … --method tools/call --tool-name list_events --tool-arg calendar_id=не-uuid</span>
+{&quot;error&quot;:{&quot;code&quot;:&quot;tool_is_error&quot;,&quot;message&quot;:&quot;Tool &#x27;list_events&#x27; returned isError:true.&quot;}}
+  isError: True | Error executing tool list_events: 1 validation error for list_eventsArguments
+
+<span class="cmd">$ … --method resources/read --uri calendar://docs/domain-rules</span>
+  # Правила домену календаря (з ЛР1)
+  
+  - Подію створює і змінює лише організатор — власник календаря; запрошений лише відповідає.
+  - Кожна зміна події збільшує version; зміна з неактуальною версією відхиляється (HTTP 412, If-Match).</pre></div></html>

@@ -1,0 +1,26 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab4-a2a-1</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab4 — zsh</div><pre><span class="cmd">$ docker compose run --rm agent-cli python scripts/a2a_demo.py</span>
+=== 1. Виявлення агентів: Consul (де) і Agent Card (що вміє) ===
+  Consul: consumer-agent  172.23.0.13:8000 protocol=a2a /.well-known/agent-card.json
+  Consul: mcp-server      172.23.0.12:8000 protocol=mcp /mcp
+  Consul: producer-agent  172.23.0.11:8000 protocol=a2a /.well-known/agent-card.json
+  Calendar Producer Agent v4.0.0: JSONRPC http://gateway/a2a/producer/; схема безпеки: X-Agent-Key
+    skill schedule_event: Створює подію в календарі організатора й запрошує учасників (SAGA CreateEvent). Продукує EventC…
+    skill reschedule_event: Переносить подію на прохання організатора (текст) або запрошеного агента (JSON {skill, eventId,…
+  Invitation Assistant Agent v4.0.0: JSONRPC http://gateway/a2a/consumer/; схема безпеки: X-Agent-Key
+    skill decision_log: Рішення асистента щодо запрошень (прийняти / відхилити / запропонувати інший час) з поясненнями…
+  [OK] продюсер оголошує навички schedule_event і reschedule_event
+  [OK] адреса інтерфейсу в картці — та, через яку звернулися (шлюз)
+
+=== 2. Автентифікація і авторизація агентів ===
+  JSON-RPC без X-Agent-Key -&gt; HTTP 401 {&#x27;error&#x27;: &#x27;unauthorized&#x27;, &#x27;message&#x27;: &#x27;потрібен дійсний X-Agent-Key&#x27;}
+  [OK] виклик без ключа агента відхилено (401)
+  olena-assistant, вільний текст -&gt; TASK_STATE_REJECTED: olena-assistant не може викликати schedule_event: вільний текст приймається лише від організатора
+  [OK] асистент учасниці не може давати продюсеру довільних доручень
+  olena-assistant просить перенести чужу зустріч -&gt; TASK_STATE_REJECTED: olena@pm.me не є учасником події 1c48f4b1-9b88-4c58-8127-70c233f20aa3
+  [OK] перенести можна лише подію, на яку запрошено (перевірка в коді, до LLM)</pre></div></html>

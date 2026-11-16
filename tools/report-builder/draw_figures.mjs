@@ -1,4 +1,4 @@
-// Схеми для звітів ЛР2 і ЛР3: Times New Roman, прості прямокутники та явні стрілки (стиль переглянутих рисунків ЛР1).
+// Схеми для звітів ЛР2–ЛР4: Times New Roman, прості прямокутники та явні стрілки (стиль переглянутих рисунків ЛР1).
 import { createRequire } from 'node:module';
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -258,12 +258,99 @@ const drawings = {
     text(1025, 830, 'Invitations-\nRescheduled або\nкомпенсація:\nпопередній час', { anchor: 'start' });
     return 1350;
   },
+
+  // ---------------- ЛР4 ----------------
+  'lab4-architecture': () => {
+    const top = [[20, 'Клієнт function\ncalling + LLM', 'REST'], [620, 'MCP-хост + LLM', 'MCP'], [1220, 'Організатор:\nA2A-клієнт', 'A2A']];
+    for (const [x, name, proto] of top) {
+      rect(x, 20, 560, 170, name);
+      arrow([[x + 280, 190], [x + 280, 330]]);
+      text(x + 305, 275, proto, { anchor: 'start' });
+    }
+    rect(20, 330, 1760, 120, 'API-шлюз Traefik :10088 (маршрути з каталогу Consul)');
+    const row = [[20, 'mcp-server\n/mcp'], [480, 'producer-agent\n+ LLM'], [940, 'consumer-agent\n+ LLM'], [1400, 'сервіси ЛР3\n/api/*']];
+    for (const [x, name] of row) {
+      arrow([[x + 190, 450], [x + 190, 590]]);
+      rect(x, 590, 380, 190, name);
+    }
+    arrow([[670, 780], [670, 880], [1130, 880], [1130, 780]], { both: true });
+    text(900, 950, 'A2A: reschedule_event');
+    arrow([[1590, 780], [1590, 1040]]);
+    text(1615, 925, 'outbox', { anchor: 'start' });
+    rect(1100, 1040, 680, 130, 'RabbitMQ');
+    arrow([[1250, 1040], [1250, 780]]);
+    text(1275, 1000, 'події', { anchor: 'start' });
+    line([[210, 780], [210, 1040]]);
+    rect(20, 1040, 860, 130, 'Consul: сервіси й агенти');
+    text(20, 1255, 'mcp-server і агенти звертаються до REST API ЛР3 через той самий шлюз;', { anchor: 'start', size: 46 });
+    text(20, 1315, 'LLM — Gemini через OpenAI-сумісний Chat Completions API.', { anchor: 'start', size: 46 });
+    return 1350;
+  },
+  'lab4-fc-sequence': () => sequence(
+    ['Користувач', 'Клієнт\n(guardrails)', 'LLM', 'REST API'],
+    [
+      { from: 0, to: 1, label: 'запит' },
+      { self: 1, label: 'фільтр ін\'єкцій,\nбюджет токенів' },
+      { from: 1, to: 2, label: 'messages + 10 tools' },
+      { from: 2, to: 1, label: 'list_my_calendars', reply: true },
+      { from: 1, to: 3, label: 'GET /calendars' },
+      { from: 1, to: 2, label: 'role=tool: дані' },
+      { from: 2, to: 1, label: 'list_events', reply: true },
+      { from: 1, to: 3, label: 'GET /events' },
+      { from: 2, to: 1, label: 'update_event\nабо create_event', reply: true },
+      { self: 1, label: 'валідація,\nполітика' },
+      { from: 1, to: 3, label: 'PATCH If-Match\nабо POST' },
+      { from: 2, to: 1, label: 'get_saga_status', reply: true },
+      { from: 2, to: 1, label: 'текст відповіді', reply: true },
+      { from: 1, to: 0, label: 'відповідь, usage', reply: true },
+    ], { size: 46 }),
+  'lab4-mcp-roles': () => {
+    group(20, 20, 700, 600, 'MCP-хост');
+    rect(70, 130, 600, 150, 'LLM');
+    arrow([[370, 280], [370, 420]], { both: true });
+    rect(70, 420, 600, 150, 'MCP-клієнт');
+    group(1080, 20, 700, 900, 'MCP-сервер');
+    rect(1130, 130, 600, 130, 'tools: 12');
+    rect(1130, 290, 600, 130, 'resources: 6');
+    rect(1130, 450, 600, 130, 'prompts: 3');
+    rect(1130, 610, 600, 250, 'guardrails:\nrate limit, аудит,\nвалідація, вилучення\nін\'єкцій');
+    arrow([[670, 495], [1080, 495]], { both: true });
+    text(900, 455, 'JSON-RPC 2.0', { size: 44 });
+    text(900, 575, 'stdio або\nStreamable\nHTTP', { size: 44 });
+    arrow([[370, 570], [370, 780]]);
+    text(395, 690, 'elicitation', { anchor: 'start' });
+    rect(20, 780, 700, 140, 'Людина: підтвердження');
+    arrow([[1430, 920], [1430, 1060]]);
+    text(1405, 1005, 'HTTP, X-User-Id', { anchor: 'end' });
+    rect(1080, 1060, 700, 130, 'REST API ЛР3');
+    return 1220;
+  },
+  'lab4-a2a-sequence': () => sequence(
+    ['Організатор', 'producer-\nagent', 'сервіси\nЛР3', 'RabbitMQ', 'consumer-\nagent'],
+    [
+      { from: 0, to: 1, label: 'schedule_event' },
+      { from: 1, to: 2, label: 'POST /events' },
+      { from: 2, to: 3, label: 'EventCreated,\nEventConfirmed' },
+      { from: 1, to: 0, label: 'Task: created', reply: true },
+      { from: 3, to: 4, label: 'EventConfirmed' },
+      { self: 4, label: 'LLM: 10:00\nпроти політики' },
+      { from: 4, to: 1, label: 'A2A: reschedule_event 12:00' },
+      { self: 1, label: 'учасник?\nLLM: політика' },
+      { from: 1, to: 2, label: 'PATCH If-Match' },
+      { from: 2, to: 3, label: 'EventReschedule-\nConfirmed' },
+      { from: 1, to: 4, label: 'Task: rescheduled', reply: true },
+      { from: 3, to: 4, label: 'EventReschedule-\nConfirmed' },
+      { self: 4, label: 'LLM:\nприйняти' },
+      { from: 4, to: 2, label: 'POST /respond' },
+    ], { size: 44 }),
 };
 
 const browser = await chromium.launch({ headless: true, executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', args: ['--disable-background-networking'] });
 const audits = [];
 try {
-  for (const [name, draw] of Object.entries(drawings)) {
+  // node draw_figures.mjs lab4 — перемалювати лише рисунки ЛР4, не чіпаючи вже зданих лабораторних.
+  const only = process.argv[2];
+  for (const [name, draw] of Object.entries(drawings).filter(([n]) => !only || n.startsWith(only))) {
     const { height, content } = svg(0, draw);
     const html = '<!doctype html><html lang="uk"><meta charset="utf-8"><title>Схема</title><style>html,body{margin:0;padding:0;background:white}svg{display:block}</style>' + content + '</html>';
     await writeFile(path.join(diagrams(name), name + '.svg'), content);

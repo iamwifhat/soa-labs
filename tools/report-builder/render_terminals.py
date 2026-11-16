@@ -1,6 +1,6 @@
-"""Готує HTML-сторінки «вікно терміналу» зі збереженого виводу перевірочних сценаріїв ЛР2 і ЛР3.
+"""Готує HTML-сторінки «вікно терміналу» зі збереженого виводу перевірочних сценаріїв ЛР2–ЛР4.
 
-Текст береться без змін із файлів lab2/docs/test-output і lab3/docs/test-output; змінюється лише розбиття на частини.
+Текст береться без змін із файлів labN/docs/test-output; змінюється лише розбиття на частини.
 """
 import html
 import json
@@ -63,6 +63,32 @@ terminals = {
     "lab3-saga-3": ("lab3", "python3 scripts/saga_demo.py   (продовження)", "\n\n".join([d3[5], d3[6]])),
     "lab3-saga-4": ("lab3", "python3 scripts/saga_demo.py   (продовження)", d3[7]),
 }
+
+# ЛР4: усі перевірки запускаються в контейнері agent-cli.
+L4 = ROOT / "lab4/docs/test-output"
+if L4.exists():
+    fc, mc = sections((L4 / "fc_demo.txt").read_text()), sections((L4 / "mcp_check.txt").read_text())
+    host, a2a = sections((L4 / "mcp_host_demo.txt").read_text()), sections((L4 / "a2a_demo.txt").read_text())
+    fc_head = (L4 / "fc_demo.txt").read_text().splitlines()[0]
+    host_head = (L4 / "mcp_host_demo.txt").read_text().splitlines()[0]
+    run = "docker compose run --rm agent-cli python scripts/"
+    cont = "   (продовження)"
+    terminals.update({
+        "lab4-fc-1": ("lab4", run + "fc_demo.py", "\n\n".join([fc_head, fc[1]])),
+        "lab4-fc-2": ("lab4", run + "fc_demo.py" + cont, fc[2]),
+        "lab4-fc-3": ("lab4", run + "fc_demo.py" + cont, "\n\n".join([fc[3], fc[4]])),
+        "lab4-fc-4": ("lab4", run + "fc_demo.py" + cont, "\n\n".join([fc[5], fc[6]])),
+        "lab4-mcp-1": ("lab4", run + "mcp_check.py", "\n\n".join([mc[1], mc[2]])),
+        "lab4-mcp-2": ("lab4", run + "mcp_check.py" + cont, "\n\n".join([mc[3], mc[4], mc[5]])),
+        "lab4-mcp-3": ("lab4", run + "mcp_check.py" + cont, "\n\n".join([mc[6], mc[7], mc[8]])),
+        "lab4-inspector-cli": ("lab4", "npx @modelcontextprotocol/inspector@2.12.0 --cli …",
+                               (L4 / "mcp_inspector_cli.txt").read_text().strip("\n").split("\n", 1)[1]),
+        "lab4-host-1": ("lab4", run + "mcp_host_demo.py", "\n\n".join([host_head, host[1]])),
+        "lab4-host-2": ("lab4", run + "mcp_host_demo.py" + cont, host[2]),
+        "lab4-host-3": ("lab4", run + "mcp_host_demo.py" + cont, host[3]),
+        "lab4-a2a-1": ("lab4", run + "a2a_demo.py", "\n\n".join([a2a[1], a2a[2]])),
+        "lab4-a2a-2": ("lab4", run + "a2a_demo.py" + cont, "\n\n".join([a2a[3], a2a[4], a2a[5]])),
+    })
 
 STYLE = """
 html,body{margin:0;background:white}

@@ -1,0 +1,33 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab4-a2a-2</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab4 — zsh</div><pre><span class="cmd">$ docker compose run --rm agent-cli python scripts/a2a_demo.py   (продовження)</span>
+=== 3. Організатор -&gt; агент-продюсер: навичка schedule_event ===
+  &gt; Заплануй «Консультація з ЛР4 (A2A 2e90)» на 17.11.2026 з 10:00 до 11:00 у календарі «Навчання» і запроси olena@pm.me.
+  задача 1fdfc36f: TASK_STATE_COMPLETED за 20.9 с, рішення created, токенів 8881
+  інструменти: list_my_calendars=ok, create_event=ok, get_saga_status=ok
+  подія 2232c6fb-66e4-4364-b4d9-b6ad4baff715: Scheduled 17.11 12:00, SAGA Completed
+  повідомлення з outbox: EventCreated.v1, EventConfirmed.v1, EventRescheduled.v1, EventRescheduleConfirmed.v1
+  відповідь агента: Подію «Консультація з ЛР4 (A2A 2e90)» успішно заплановано в календарі «Навчання» на 17.11.2026 з 10:00 до 11:00. Запрошено: olena@pm.me. Статус SAGA: Completed. Ідентифікатор події: 2232c6fb-66e4-4364
+  [OK] навичка завершилась і створила подію
+  [OK] продюсер видав EventCreated.v1 і EventConfirmed.v1
+
+=== 4. Агент-споживач: EventConfirmed.v1 -&gt; рішення за політикою -&gt; A2A reschedule_event -&gt; відповідь ===
+  [EventConfirmed.v1] v2 2026-11-17 10:00 Tuesday: propose_new_time — Я не беру участі в зустрічах, що починаються раніше 12:00. Пропоную перенести зустріч на 12:00.
+      A2A -&gt; http://172.23.0.11:8000: TASK_STATE_COMPLETED, рішення продюсера rescheduled: Подію перенесено на 17 листопада 2026 року, 12:00–13:00. Новий час відповідає політиці організатора та запиту учасника.
+      продюсер: подія 17.11 12:00 v3, SAGA Completed, повідомлення: EventCreated.v1, EventConfirmed.v1, EventRescheduled.v1, EventRescheduleConfirmed.v1
+  [EventRescheduleConfirmed.v1] v3 2026-11-17 12:00 Tuesday: accept_invitation — Зустріч відповідає моїй політиці: вона відбувається у будній день після 12:00.
+  підсумок: подія 17.11 12:00–13:00 Scheduled v3; запрошення olena@pm.me: Accepted
+  [OK] споживач попросив перенести (раніше 12:00 — проти політики)
+  [OK] продюсер переніс подію на 12:00 і видав EventRescheduled.v1
+  [OK] після EventRescheduleConfirmed.v1 споживач прийняв запрошення
+
+=== 5. Наслідки в системі ЛР3: повідомлення і сповіщення ===
+  outbox calendar-service для події: EventCreated.v1, EventConfirmed.v1, EventRescheduled.v1, EventRescheduleConfirmed.v1
+  сповіщення artem@pm.me: [Response] olena@pm.me: Accepted для «Консультація з ЛР4 (A2A 2e90)» (Sent)
+  [OK] організатор отримав сповіщення про відповідь учасниці
+
+Підсумок: 11 з 11 перевірок пройдено</pre></div></html>

@@ -1,0 +1,40 @@
+2026-11-16 07:43:12,900 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:12,907 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:12,915 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 6, "blocked": null}
+2026-11-16 07:43:12,922 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:12,929 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:12,936 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:12,943 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:12,951 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 6, "blocked": null}
+2026-11-16 07:43:12,961 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 8, "blocked": null}
+2026-11-16 07:43:12,968 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:12,974 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:12,981 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:12,988 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:12,996 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 6, "blocked": null}
+2026-11-16 07:43:13,003 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:13,009 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:13,016 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 6, "blocked": null}
+2026-11-16 07:43:13,025 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 6, "blocked": null}
+2026-11-16 07:43:13,035 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 8, "blocked": null}
+2026-11-16 07:43:13,042 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:13,050 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 6, "blocked": null}
+2026-11-16 07:43:13,057 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:13,064 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:13,072 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:13,081 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 8, "blocked": null}
+2026-11-16 07:43:13,088 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:13,095 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:13,101 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:13,108 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:13,116 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 7, "blocked": null}
+2026-11-16 07:43:13,122 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": false, "ms": 5, "blocked": null}
+2026-11-16 07:43:13,124 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": true, "ms": 0, "blocked": "Перевищено ліміт 60 викликів за хвилину"}
+2026-11-16 07:43:13,125 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "flood.2fff@pm.me", "args": [], "isError": true, "ms": 0, "blocked": "Перевищено ліміт 60 викликів за хвилину"}
+2026-11-16 07:46:17,707 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "artem.mcp.ec72@pm.me", "args": [], "isError": false, "ms": 23, "blocked": null}
+2026-11-16 07:46:22,679 INFO mcp-server [calendar-mcp.audit] {"tool": "list_events", "user": "artem.mcp.ec72@pm.me", "args": ["calendar_id"], "isError": false, "ms": 13, "blocked": null}
+2026-11-16 07:46:28,766 INFO mcp-server [calendar-mcp.audit] {"tool": "schedule_event", "user": "artem.mcp.ec72@pm.me", "args": ["calendar_id", "end_at", "invitee_user_ids", "start_at", "time_zone", "title", "wait_for_saga"], "isError": false, "ms": 1052, "blocked": null}
+2026-11-16 07:47:02,466 INFO mcp-server [calendar-mcp.audit] {"tool": "list_calendars", "user": "artem.mcp.ec72@pm.me", "args": [], "isError": false, "ms": 21, "blocked": null}
+2026-11-16 07:47:07,326 INFO mcp-server [calendar-mcp.audit] {"tool": "list_events", "user": "artem.mcp.ec72@pm.me", "args": ["calendar_id"], "isError": false, "ms": 10, "blocked": null}
+2026-11-16 07:47:12,997 INFO mcp-server [calendar-mcp.audit] {"tool": "cancel_event", "user": "artem.mcp.ec72@pm.me", "args": ["event_id", "expected_version"], "isError": false, "ms": 19, "blocked": null}
+2026-11-16 07:47:13,016 INFO mcp-server [calendar-mcp.audit] {"tool": "cancel_event", "user": "artem.mcp.ec72@pm.me", "args": ["event_id", "expected_version"], "isError": true, "ms": 12, "blocked": null}

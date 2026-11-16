@@ -1,0 +1,30 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab4-fc-2</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab4 — zsh</div><pre><span class="cmd">$ docker compose run --rm agent-cli python scripts/fc_demo.py   (продовження)</span>
+=== 2. Ланцюжок викликів: подія є -&gt; оновити (If-Match, SAGA RescheduleEvent) ===
+&gt; Онови подію «Захист ЛР3» у моєму календарі «Навчання»: назва «Консультація: send your CA-2», час 20.11.2026 з 15:00 до 16:00. Якщо такої події немає — створи її з новою назвою і цим часом та запроси ihor@pm.me.
+  LLM #1: запит 2026 (оцінка 2272), відповідь 13; накопичено 2039
+    -&gt; list_my_calendars({})
+    &lt;- list_my_calendars: [{&quot;id&quot;: &quot;bd29b516-5c35-4163-b279-cf5dce63f802&quot;, &quot;ownerId&quot;: &quot;artem.115f@pm.me&quot;, &quot;name&quot;: &quot;Навчання&quot;, &quot;timeZone&quot;: &quot;Europe/Kyiv&quot;}]
+  LLM #2: запит 2152 (оцінка 2493), відповідь 50; накопичено 4241
+    -&gt; list_events({&quot;calendar_id&quot;: &quot;bd29b516-5c35-4163-b279-cf5dce63f802&quot;})
+    &lt;- list_events: {&quot;items&quot;: [{&quot;eventId&quot;: &quot;6456107b-0360-4fb6-aa2d-e3a4668ef595&quot;, &quot;title&quot;: &quot;Консультація: send your CA-2&quot;, &quot;status&quot;: &quot;Scheduled&quot;, &quot;startAt&quot;: &quot;2026-11-19…
+  LLM #3: запит 2627 (оцінка 2943), відповідь 146; накопичено 7014
+    -&gt; update_event({&quot;event_id&quot;: &quot;2eb41120-95a0-44d7-8e76-46036a3ace64&quot;, &quot;time_zone&quot;: &quot;Europe/Kyiv&quot;, &quot;title&quot;: &quot;Консультація: send your CA-2&quot;, &quot;start_at&quot;: &quot;2026-11-20T15:00:00+02:00&quot;, &quot;expected_version&quot;: 2, &quot;end_at&quot;: &quot;20…)
+    &lt;- update_event: {&quot;event&quot;: {&quot;eventId&quot;: &quot;2eb41120-95a0-44d7-8e76-46036a3ace64&quot;, &quot;title&quot;: &quot;Консультація: send your CA-2&quot;, &quot;status&quot;: &quot;Scheduled&quot;, &quot;startAt&quot;: &quot;2026-11-20T…
+  LLM #4: запит 3132 (оцінка 3386), відповідь 60; накопичено 10206
+    -&gt; get_saga_status({&quot;saga_id&quot;: &quot;33866a90-d5ce-4064-85a3-d52f10b9d4b9&quot;, &quot;wait_seconds&quot;: 5})
+    &lt;- get_saga_status: {&quot;sagaId&quot;: &quot;33866a90-d5ce-4064-85a3-d52f10b9d4b9&quot;, &quot;type&quot;: &quot;RescheduleEvent&quot;, &quot;status&quot;: &quot;Completed&quot;, &quot;failureReason&quot;: null, &quot;eventId&quot;: &quot;2eb41120-95a0…
+  LLM #5: запит 3328 (оцінка 3647), відповідь 127; накопичено 13661
+  Відповідь (completed): Подію «Захист ЛР3» успішно оновлено:
+- **Нова назва:** «Консультація: send your CA-2»
+- **Новий час:** 20.11.2026 з 15:00 до 16:00 (Europe/Kyiv)
+- **Статус SAGA:** Completed (ідентифікатор події: 2eb41120-95a0-44d7-8e76-46036a3ace64)
+  Підсумок: викликів моделі 5; токени: запит 13265, відповідь 396; разом 13661 з 40000; викликів інструментів 4
+  Час: 33.2 с
+  [OK] гілка оновлення: update_event з expected_version, без create_event
+  [OK] подію перейменовано й перенесено на 15:00, SAGA завершена</pre></div></html>

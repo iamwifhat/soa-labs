@@ -1,5 +1,6 @@
-// Знімки інтерфейсів Consul, Traefik і RabbitMQ запущеного стеку ЛР2/ЛР3.
+// Знімки інтерфейсів Consul, Traefik і RabbitMQ запущеного стеку ЛР2/ЛР3 та MCP Inspector для ЛР4.
 // Запуск: node capture_ui.mjs ../../lab2/docs/screenshots [consul traefik rabbit]
+//         INSPECTOR_URL='http://127.0.0.1:6274?MCP_INSPECTOR_API_TOKEN=…' node capture_ui.mjs ../../lab4/docs/screenshots inspector
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -36,6 +37,18 @@ const shots = {
     await page.goto('http://localhost:15672/#/queues');
     await page.waitForTimeout(3500);
     await page.screenshot({ path: `${out}/rabbitmq-queues.png` });
+  },
+  // ЛР4: INSPECTOR_URL — адреса вебінтерфейсу MCP Inspector з токеном, яку він друкує під час запуску.
+  inspector: async () => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.emulateMedia({ colorScheme: 'light' });
+    await page.goto(process.env.INSPECTOR_URL);
+    await page.getByRole('switch').first().click({ force: true });  // input перемикача Mantine прихований під доріжкою
+    await page.getByText('Connected', { exact: true }).waitFor({ timeout: 15000 });
+    await page.locator('label[for$="-Tools"]').click();  // вкладка Tools: видима мітка прихованого radio
+    await page.getByText('Запланувати подію').first().click();
+    await page.waitForTimeout(1500);
+    await page.screenshot({ path: `${out}/lab4-inspector.png` });
   },
 };
 for (const [name, shot] of Object.entries(shots)) if (!only.length || only.includes(name)) await shot();

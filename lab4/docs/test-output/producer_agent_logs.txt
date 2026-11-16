@@ -1,0 +1,11 @@
+2026-11-16 07:47:20,086 INFO producer-agent [producer-agent] Задача 7c0e320f-6df2-4172-81b7-491b425023ec від olena-assistant (olena@pm.me): навичка schedule_event
+2026-11-16 07:47:20,127 INFO producer-agent [producer-agent] Задача 31173e16-164f-4026-b472-06f51dcc49e1 від olena-assistant (olena@pm.me): навичка reschedule_event
+2026-11-16 07:47:20,147 INFO producer-agent [producer-agent] Задача 1fdfc36f-b4e8-4a30-a47c-cbd14e73d3e7 від organizer-console (artem@pm.me): навичка schedule_event
+2026-11-16 07:47:21,096 INFO producer-agent [llm] LLM виклик 1: {'call': 1, 'estimate': 1850, 'prompt': 1692, 'completion': 13, 'reasoning': 0, 'total': 1705}, finish=tool_calls
+2026-11-16 07:47:29,679 INFO producer-agent [llm] LLM виклик 2: {'call': 2, 'estimate': 2118, 'prompt': 1882, 'completion': 164, 'reasoning': 0, 'total': 3751}, finish=tool_calls
+2026-11-16 07:47:31,107 INFO producer-agent [producer-agent] Задача 543a3962-7e30-4978-8676-fcd2489874d9 від olena-assistant (olena@pm.me): навичка reschedule_event
+2026-11-16 07:47:32,300 INFO producer-agent [llm] LLM виклик 3: {'call': 3, 'estimate': 2558, 'prompt': 2378, 'completion': 59, 'reasoning': 0, 'total': 6188}, finish=tool_calls
+2026-11-16 07:47:35,846 INFO producer-agent [llm] LLM виклик 1: {'call': 1, 'estimate': 1278, 'prompt': 1277, 'completion': 130, 'reasoning': 0, 'total': 1407}, finish=tool_calls
+2026-11-16 07:47:41,056 INFO producer-agent [llm] LLM виклик 4: {'call': 4, 'estimate': 2818, 'prompt': 2570, 'completion': 123, 'reasoning': 0, 'total': 8881}, finish=stop
+2026-11-16 07:47:45,727 INFO producer-agent [llm] LLM виклик 2: {'call': 2, 'estimate': 1705, 'prompt': 1769, 'completion': 60, 'reasoning': 0, 'total': 3236}, finish=tool_calls
+2026-11-16 07:47:50,868 INFO producer-agent [llm] LLM виклик 3: {'call': 3, 'estimate': 1966, 'prompt': 1964, 'completion': 46, 'reasoning': 0, 'total': 5246}, finish=stop

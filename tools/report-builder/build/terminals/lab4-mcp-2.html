@@ -1,0 +1,42 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab4-mcp-2</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab4 — zsh</div><pre><span class="cmd">$ docker compose run --rm agent-cli python scripts/mcp_check.py   (продовження)</span>
+=== 3. Інструменти: календар, подія, SAGA з повідомленнями про прогрес ===
+  create_calendar -&gt; 3d0ead06-9488-4c36-8b92-22df05b42fee «Навчання 2fff»
+    progress 1.0: SAGA CreateEvent: Крок 1 (calendar): подію збережено зі статусом Pending; EventCreated.v1 записано в outbox у тій самій транзакції
+  schedule_event -&gt; 6b44fb92-4b0a-4b27-97ed-07297a4c43b1 Scheduled v2, SAGA Completed
+  [OK] schedule_event дочекався SAGA: подія Scheduled
+  [OK] під час очікування SAGA сервер надсилав notifications/progress
+  [OK] list_events повертає коротку проєкцію події
+
+=== 4. Ресурси і промпти ===
+  calendar://docs/domain-rules: # Правила домену календаря (з ЛР1)
+  [OK] ресурс календарів користувача
+  [OK] ресурс-шаблон calendar://events/{event_id}
+  [OK] OpenAPI як ресурс без /internal і /diagnostics
+  prompts/get schedule_meeting: Заплануй зустріч «Захист ЛР4» у моєму календарі «Навчання» на 2026-11-20 10:00 тривалістю 60 хв і запроси: olena@pm.me.
+  [OK] промпт-шаблон підставляє аргументи
+
+=== 5. Guardrails: валідація аргументів ===
+  UUID                       -&gt; isError=True: Error executing tool schedule_event: 1 validation error for schedule_eventArguments
+calendar_id
+  Input should
+  [OK] відхилено: UUID
+  час без зміщення           -&gt; isError=True: Error executing tool schedule_event: 1 validation error for schedule_eventArguments
+start_at
+  Input should ha
+  [OK] відхилено: час без зміщення
+  подія в минулому           -&gt; isError=True: Error executing tool schedule_event: початок 2026-11-14T10:00:00+02:00 має бути в майбутньому і не далі ніж че
+  [OK] відхилено: подія в минулому
+  email учасника             -&gt; isError=True: Error executing tool schedule_event: 1 validation error for schedule_eventArguments
+invitee_user_ids.0
+  Strin
+  [OK] відхилено: email учасника
+  prompt injection у назві   -&gt; isError=True: Error executing tool schedule_event: Назва події схожа на інструкції для моделі (prompt injection) і не може б
+  [OK] відхилено: prompt injection у назві
+  застаріла версія          -&gt; Error executing tool update_event: HTTP 412 version_mismatch: Очікувана версія 1 не збігається з поточною 2
+  [OK] зміна із застарілою expected_version -&gt; HTTP 412</pre></div></html>

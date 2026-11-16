@@ -1,0 +1,29 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab4-host-1</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab4 — zsh</div><pre><span class="cmd">$ docker compose run --rm agent-cli python scripts/mcp_host_demo.py</span>
+Модель gemini-3.1-flash-lite (reasoning_effort=none); користувач artem.mcp.ec72@pm.me; MCP http://gateway/mcp
+
+=== 1. Streamable HTTP: промпт-шаблон schedule_meeting від сервера -&gt; інструменти сервера ===
+  prompts/get schedule_meeting -&gt; 473 символів: «Заплануй зустріч «Захист ЛР4» у моєму календарі «Навчання» на 18.11.2026 14:00 тривалістю 45 хв і запроси: ihor@pm.me.»
+  MCP: сервер calendar-mcp 4.0.0, інструментів 12
+  LLM #1: запит 2202 (оцінка 2506), відповідь 11; накопичено 2213
+    -&gt; list_calendars({})
+    &lt;- list_calendars: {&quot;items&quot;: [{&quot;id&quot;: &quot;1f96ab9b-40c5-4531-80dc-89e050cdc54f&quot;, &quot;ownerId&quot;: &quot;artem.mcp.ec72@pm.me&quot;, &quot;name&quot;: &quot;Навчання&quot;, &quot;timeZone&quot;: &quot;Europe/Kyiv&quot;}], &quot;total&quot;…
+  LLM #2: запит 2337 (оцінка 2743), відповідь 49; накопичено 4599
+    -&gt; list_events({&quot;calendar_id&quot;: &quot;1f96ab9b-40c5-4531-80dc-89e050cdc54f&quot;})
+    &lt;- list_events: {&quot;items&quot;: [], &quot;total&quot;: 0, &quot;truncated&quot;: false}
+  LLM #3: запит 2434 (оцінка 2949), відповідь 159; накопичено 7192
+    -&gt; schedule_event({&quot;invitee_user_ids&quot;: [&quot;ihor@pm.me&quot;], &quot;start_at&quot;: &quot;2026-11-18T14:00:00+02:00&quot;, &quot;title&quot;: &quot;Захист ЛР4&quot;, &quot;time_zone&quot;: &quot;Europe/Kyiv&quot;, &quot;calendar_id&quot;: &quot;1f96ab9b-40c5-4531-80dc-89e050cdc54f&quot;, &quot;wait_for_saga&quot;…)
+    &lt;- schedule_event: {&quot;event&quot;: {&quot;eventId&quot;: &quot;981decc4-b2d4-42cd-a794-e24d82552bd4&quot;, &quot;title&quot;: &quot;Захист ЛР4&quot;, &quot;status&quot;: &quot;Scheduled&quot;, &quot;startAt&quot;: &quot;2026-11-18T12:00:00+00:00&quot;, &quot;…
+  LLM #4: запит 2914 (оцінка 3396), відповідь 117; накопичено 10223
+  Відповідь (completed): Зустріч «Захист ЛР4» успішно запланована:
+* **ID події:** 981decc4-b2d4-42cd-a794-e24d82552bd4
+* **Час:** 18.11.2026, 14:00–14:45 (Europe/Kyiv)
+* **Статус SAGA:** Completed
+* **Запрошені:** ihor@pm.me
+  Підсумок: викликів моделі 4; токени: запит 9887, відповідь 336; разом 10223 з 40000; викликів інструментів 3
+  [OK] подію створено через MCP-інструмент schedule_event і SAGA завершено</pre></div></html>

@@ -1,0 +1,35 @@
+$ npx @modelcontextprotocol/inspector@2.12.0 --cli http://localhost:10088/mcp --transport http --header "X-User-Id: artem@pm.me" --method tools/list
+  list_calendars         readOnly               args: 
+  create_calendar        -                      args: name, time_zone
+  list_events            readOnly               args: calendar_id, status, limit
+  get_event              readOnly               args: event_id
+  event_overview         readOnly               args: event_id
+  schedule_event         -                      args: calendar_id, title, start_at, end_at, time_zone, invitee_user_ids, remind_before_minutes, wait_for_saga
+  update_event           -                      args: event_id, expected_version, title, start_at, end_at, time_zone, wait_for_saga
+  cancel_event           destructive            args: event_id, expected_version
+  get_saga               readOnly               args: saga_id
+  list_invitations       readOnly               args: event_id, limit
+  respond_to_invitation  idempotent             args: invitation_id, decision, event_version
+  list_notifications     readOnly               args: limit
+
+$ … --method resources/templates/list
+  calendar://users/{user_id}/calendars       Календарі користувача
+  calendar://calendars/{calendar_id}/events  Події календаря
+  calendar://events/{event_id}               Подія
+  calendar://sagas/{saga_id}                 Журнал SAGA
+  calendar://openapi/{service}               OpenAPI сервісу
+
+$ … --method prompts/list
+  schedule_meeting     (title, participants, start, duration_minutes, calendar_name)
+  reschedule_meeting   (event_title, new_start, new_end, calendar_name)
+  weekly_agenda        (calendar_name, days)
+
+$ … --method tools/call --tool-name list_events --tool-arg calendar_id=не-uuid
+{"error":{"code":"tool_is_error","message":"Tool 'list_events' returned isError:true."}}
+  isError: True | Error executing tool list_events: 1 validation error for list_eventsArguments
+
+$ … --method resources/read --uri calendar://docs/domain-rules
+  # Правила домену календаря (з ЛР1)
+  
+  - Подію створює і змінює лише організатор — власник календаря; запрошений лише відповідає.
+  - Кожна зміна події збільшує version; зміна з неактуальною версією відхиляється (HTTP 412, If-Match).

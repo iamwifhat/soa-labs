@@ -1,0 +1,37 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab4-mcp-1</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab4 — zsh</div><pre><span class="cmd">$ docker compose run --rm agent-cli python scripts/mcp_check.py</span>
+=== 1. Підключення: initialize, можливості сервера ===
+  сервер: calendar-mcp 4.0.0 «Хмарний календар (ЛР4)», протокол 2026-07-28
+  можливості: tools=True, resources=True, prompts=True
+  [OK] сервер оголошує tools, resources і prompts
+  [OK] сервер передає instructions для моделі
+
+=== 2. Каталог: tools/list, resources/list, prompts/list ===
+  tool list_calendars         [readOnly] Календарі поточного користувача: id, назва, часовий пояс.
+  tool create_calendar        [write] Створює календар поточного користувача.
+  tool list_events            [readOnly] Події календаря за часом початку (коротко: id, назва, статус, час, ver
+  tool get_event              [readOnly] Повні дані події, зокрема поточне поле version для подальших змін.
+  tool event_overview         [readOnly] Подія разом із запрошеннями й нагадуваннями (композиція трьох сервісів
+  tool schedule_event         [write] Створює подію й запрошує учасників (SAGA CreateEvent). Чекає завершенн
+  tool update_event           [write] Перейменування та/або перенесення (If-Match: expected_version). Перене
+  tool cancel_event           [destructive] Скасовує подію (незворотно, учасники отримають сповіщення). Потребує п
+  tool get_saga               [readOnly] Стан SAGA і журнал її кроків (saga log).
+  tool list_invitations       [readOnly] Запрошення поточного користувача або (з event_id) усі запрошення його 
+  tool respond_to_invitation  [write] Приймає або відхиляє запрошення на певну версію події. Повтор того сам
+  tool list_notifications     [readOnly] Останні сповіщення користувача і стан їх доставки.
+  resource calendar://docs/domain-rules
+  resource template calendar://users/{user_id}/calendars
+  resource template calendar://calendars/{calendar_id}/events
+  resource template calendar://events/{event_id}
+  resource template calendar://sagas/{saga_id}
+  resource template calendar://openapi/{service}
+  prompt schedule_meeting(title, participants, start, duration_minutes, calendar_name)
+  prompt reschedule_meeting(event_title, new_start, new_end, calendar_name)
+  prompt weekly_agenda(calendar_name, days)
+  [OK] 12 інструментів, з них cancel_event позначено destructiveHint
+  [OK] JSON Schema аргументів містить обмеження (uuid, date-time, maxLength, pattern email)</pre></div></html>

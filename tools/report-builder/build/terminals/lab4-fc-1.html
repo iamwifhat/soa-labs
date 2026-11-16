@@ -1,0 +1,34 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab4-fc-1</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab4 — zsh</div><pre><span class="cmd">$ docker compose run --rm agent-cli python scripts/fc_demo.py</span>
+Модель: gemini-3.1-flash-lite (reasoning_effort=none); користувач artem.115f@pm.me; бюджет 40000 токенів, max_tokens 2048, кроків 8, викликів 12
+
+=== 1. Ланцюжок викликів: події немає -&gt; створити ===
+&gt; Онови подію «Консультація з ЛР4» у моєму календарі «Навчання»: назва «Консультація: send your CA-2», час 19.11.2026 з 15:00 до 16:00. Якщо такої події немає — створи її з новою назвою і цим часом та запроси ihor@pm.me.
+  LLM #1: запит 2028 (оцінка 2274), відповідь 13; накопичено 2041
+    -&gt; list_my_calendars({})
+    &lt;- list_my_calendars: [{&quot;id&quot;: &quot;bd29b516-5c35-4163-b279-cf5dce63f802&quot;, &quot;ownerId&quot;: &quot;artem.115f@pm.me&quot;, &quot;name&quot;: &quot;Навчання&quot;, &quot;timeZone&quot;: &quot;Europe/Kyiv&quot;}]
+  LLM #2: запит 2154 (оцінка 2496), відповідь 50; накопичено 4245
+    -&gt; list_events({&quot;calendar_id&quot;: &quot;bd29b516-5c35-4163-b279-cf5dce63f802&quot;})
+    &lt;- list_events: {&quot;items&quot;: [], &quot;total&quot;: 0, &quot;truncated&quot;: false}
+  LLM #3: запит 2252 (оцінка 2703), відповідь 156; накопичено 6653
+    -&gt; create_event({&quot;time_zone&quot;: &quot;Europe/Kyiv&quot;, &quot;start_at&quot;: &quot;2026-11-19T15:00:00+02:00&quot;, &quot;calendar_id&quot;: &quot;bd29b516-5c35-4163-b279-cf5dce63f802&quot;, &quot;end_at&quot;: &quot;2026-11-19T16:00:00+02:00&quot;, &quot;title&quot;: &quot;Консультація: send your C…)
+    &lt;- create_event: {&quot;event&quot;: {&quot;eventId&quot;: &quot;6456107b-0360-4fb6-aa2d-e3a4668ef595&quot;, &quot;title&quot;: &quot;Консультація: send your CA-2&quot;, &quot;status&quot;: &quot;Pending&quot;, &quot;startAt&quot;: &quot;2026-11-19T15…
+  LLM #4: запит 2728 (оцінка 3142), відповідь 50; накопичено 9431
+    -&gt; get_saga_status({&quot;saga_id&quot;: &quot;d4d9c5be-db60-4d6e-83f7-93fb22fed857&quot;})
+    &lt;- get_saga_status: {&quot;sagaId&quot;: &quot;d4d9c5be-db60-4d6e-83f7-93fb22fed857&quot;, &quot;type&quot;: &quot;CreateEvent&quot;, &quot;status&quot;: &quot;Completed&quot;, &quot;failureReason&quot;: null, &quot;eventId&quot;: &quot;6456107b-0360-4fb…
+LLM: InternalServerError, повтор 1 через 2 с
+  LLM #5: запит 2909 (оцінка 3396), відповідь 148; накопичено 12488
+  Відповідь (completed): Подію «Консультація з ЛР4» не було знайдено в календарі «Навчання», тому я створив нову подію:
+- **Назва:** Консультація: send your CA-2
+- **Час:** 19.11.2026, 15:00–16:00 (Europe/Kyiv)
+- **Запрошений:** ihor@pm.me
+- **Статус SAGA:** Completed (ID: 6456107b-0360-4fb6-aa2d-e3a4668ef595)
+  Підсумок: викликів моделі 5; токени: запит 12071, відповідь 417; разом 12488 з 40000; викликів інструментів 4
+  Час: 32.5 с
+  [OK] гілка створення: list_my_calendars -&gt; list_events -&gt; create_event -&gt; get_saga_status
+  [OK] подію створено і підтверджено SAGA (Scheduled), запрошено ihor@pm.me</pre></div></html>

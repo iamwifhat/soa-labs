@@ -1,0 +1,26 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab4-host-3</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab4 — zsh</div><pre><span class="cmd">$ docker compose run --rm agent-cli python scripts/mcp_host_demo.py   (продовження)</span>
+=== 3. Деструктивний інструмент: elicitation, людина відмовляє ===
+  MCP: сервер calendar-mcp 4.0.0, інструментів 12
+  LLM #1: запит 2040 (оцінка 2363), відповідь 11; накопичено 2051
+    -&gt; list_calendars({})
+    &lt;- list_calendars: {&quot;items&quot;: [{&quot;id&quot;: &quot;1f96ab9b-40c5-4531-80dc-89e050cdc54f&quot;, &quot;ownerId&quot;: &quot;artem.mcp.ec72@pm.me&quot;, &quot;name&quot;: &quot;Навчання&quot;, &quot;timeZone&quot;: &quot;Europe/Kyiv&quot;}], &quot;total&quot;…
+  LLM #2: запит 2175 (оцінка 2600), відповідь 49; накопичено 4275
+    -&gt; list_events({&quot;calendar_id&quot;: &quot;1f96ab9b-40c5-4531-80dc-89e050cdc54f&quot;})
+    &lt;- list_events: {&quot;items&quot;: [{&quot;eventId&quot;: &quot;981decc4-b2d4-42cd-a794-e24d82552bd4&quot;, &quot;title&quot;: &quot;Захист ЛР4&quot;, &quot;status&quot;: &quot;Scheduled&quot;, &quot;startAt&quot;: &quot;2026-11-18T12:00:00+00:00&quot;, …
+  LLM #3: запит 2457 (оцінка 2924), відповідь 55; накопичено 6787
+    -&gt; cancel_event({&quot;expected_version&quot;: 2, &quot;event_id&quot;: &quot;981decc4-b2d4-42cd-a794-e24d82552bd4&quot;})
+    ? MCP-сервер просить підтвердження: Скасувати подію «Захист ЛР4» 18.11.2026 14:00–14:45 (Europe/Kyiv)? Дію не можна відмінити.
+      відмовлено
+    &lt;- cancel_event: ПОМИЛКА tool-error: Error executing tool cancel_event: Користувач не підтвердив скасування (decline); подію не змінено
+  LLM #4: запит 2577 (оцінка 3159), відповідь 54; накопичено 9418
+  Відповідь (completed): Подію «Захист ЛР4» не було скасовано, оскільки для виконання цієї дії потрібне ваше підтвердження. Будь ласка, підтвердьте, що ви дійсно хочете скасувати цю подію.
+  Підсумок: викликів моделі 4; токени: запит 9249, відповідь 169; разом 9418 з 40000; викликів інструментів 3
+  [OK] сервер запитав підтвердження, після відмови подія Scheduled
+
+Підсумок: 3 з 3 перевірок пройдено</pre></div></html>

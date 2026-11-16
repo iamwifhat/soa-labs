@@ -1,0 +1,8 @@
+2026-11-16 07:42:37,225 WARNING consumer-agent [messaging] RabbitMQ недоступний (спроба 1): [Errno 111] Connect call failed ('172.23.0.6', 5672)
+2026-11-16 07:42:39,269 INFO consumer-agent [messaging] Підписка на consumer-agent.invitations: calendar.event.confirmed, calendar.event.reschedule-confirmed
+2026-11-16 07:43:12,803 INFO consumer-agent [llm] LLM виклик 1: {'call': 1, 'estimate': 775, 'prompt': 709, 'completion': 48, 'reasoning': 0, 'total': 757}, finish=tool_calls
+2026-11-16 07:43:12,811 INFO consumer-agent [consumer-agent] Рішення щодо 6b44fb92-4b0a-4b27-97ed-07297a4c43b1 v2: accept_invitation — Зустріч відповідає моїй політиці: будній день, час з 12:00 до 18:00.
+2026-11-16 07:47:31,083 INFO consumer-agent [llm] LLM виклик 1: {'call': 1, 'estimate': 778, 'prompt': 718, 'completion': 119, 'reasoning': 0, 'total': 837}, finish=tool_calls
+2026-11-16 07:47:50,891 INFO consumer-agent [consumer-agent] Рішення щодо 2232c6fb-66e4-4364-b4d9-b6ad4baff715 v2: propose_new_time — Я не беру участі в зустрічах, що починаються раніше 12:00. Пропоную перенести зустріч на 12:00.
+2026-11-16 07:47:52,221 INFO consumer-agent [llm] LLM виклик 1: {'call': 1, 'estimate': 629, 'prompt': 588, 'completion': 42, 'reasoning': 0, 'total': 630}, finish=tool_calls
+2026-11-16 07:47:52,229 INFO consumer-agent [consumer-agent] Рішення щодо 2232c6fb-66e4-4364-b4d9-b6ad4baff715 v3: accept_invitation — Зустріч відповідає моїй політиці: вона відбувається у будній день після 12:00.

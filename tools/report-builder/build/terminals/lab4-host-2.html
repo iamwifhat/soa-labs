@@ -1,0 +1,28 @@
+<!doctype html><html lang="uk"><meta charset="utf-8"><title>lab4-host-2</title><style>
+html,body{margin:0;background:white}
+.term{width:90ch;border:2px solid #9a9a9a;font-family:Menlo,'DejaVu Sans Mono',monospace;font-size:15px;color:#111;background:#fff}
+.bar{background:#ececec;border-bottom:1px solid #b5b5b5;padding:6px 12px;font-family:'Helvetica Neue',Arial,sans-serif;font-size:14px;color:#333}
+pre{margin:0;padding:10px 14px 14px;white-space:pre-wrap;word-break:break-word;font:inherit;line-height:1.35}
+.cmd{font-weight:bold}
+</style><div class="term" id="term"><div class="bar">lab4 — zsh</div><pre><span class="cmd">$ docker compose run --rm agent-cli python scripts/mcp_host_demo.py   (продовження)</span>
+=== 2. stdio: сервер як підпроцес хоста, шаблон weekly_agenda ===
+  MCP: сервер calendar-mcp 4.0.0, інструментів 12
+  LLM #1: запит 2100 (оцінка 2432), відповідь 11; накопичено 2111
+    -&gt; list_calendars({})
+    &lt;- list_calendars: {&quot;items&quot;: [{&quot;id&quot;: &quot;1f96ab9b-40c5-4531-80dc-89e050cdc54f&quot;, &quot;ownerId&quot;: &quot;artem.mcp.ec72@pm.me&quot;, &quot;name&quot;: &quot;Навчання&quot;, &quot;timeZone&quot;: &quot;Europe/Kyiv&quot;}], &quot;total&quot;…
+  LLM #2: запит 2235 (оцінка 2669), відповідь 49; накопичено 4395
+    -&gt; list_events({&quot;calendar_id&quot;: &quot;1f96ab9b-40c5-4531-80dc-89e050cdc54f&quot;})
+    &lt;- list_events: {&quot;items&quot;: [{&quot;eventId&quot;: &quot;981decc4-b2d4-42cd-a794-e24d82552bd4&quot;, &quot;title&quot;: &quot;Захист ЛР4&quot;, &quot;status&quot;: &quot;Scheduled&quot;, &quot;startAt&quot;: &quot;2026-11-18T12:00:00+00:00&quot;, …
+  LLM #3: запит 2517 (оцінка 2994), відповідь 11; накопичено 6923
+    -&gt; list_invitations({})
+    &lt;- list_invitations: {&quot;items&quot;: [], &quot;total&quot;: 0, &quot;truncated&quot;: false}
+  LLM #4: запит 2578 (оцінка 3184), відповідь 120; накопичено 9621
+  Відповідь (completed): Ось порядок денний у календарі «Навчання» на найближчі 7 днів (до 23 листопада 2026 року):
+
+**Події в календарі «Навчання»:**
+*   **Захист ЛР4**: 18 листопада 2026 року, 14:00–14:45 (за Києвом), статус: Scheduled.
+
+**Запрошення зі статусом Pending:**
+*   Наразі у вас немає нових запрошень зі статусом Pending.
+  Підсумок: викликів моделі 4; токени: запит 9430, відповідь 191; разом 9621 з 40000; викликів інструментів 3
+  [OK] через stdio хост отримав події і склав порядок денний</pre></div></html>
